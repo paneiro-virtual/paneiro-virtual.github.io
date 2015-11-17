@@ -1,0 +1,1 @@
+!function(a,b,c){}(window,document,void 0);
