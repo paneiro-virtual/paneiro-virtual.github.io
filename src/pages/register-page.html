@@ -1,0 +1,66 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../paneiro-theme.html">
+<link rel="import" href="../partials/page-header.html">
+<link rel="import" href="../partials/page-footer.html">
+<link rel="import" href="../elements/phone-input.html">
+<link rel="import" href="../elements/cpf-input.html">
+
+</head><body><dom-module id="register-page">
+  <template>
+    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}header{padding:0 8px;}main{padding:48px 0;}.page-title{@apply (--paper-font-display1);margin-bottom:20px;font-weight:300;text-align:center;}.divider{height:1px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}.divider-border{height:100%;width:100px;max-width:100%;background:var(--primary-color);}paper-button{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:0;}#registrationForm{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;}.input{margin:8px;}.input-name, .input-email{width:calc(66.666666% - 16px);}.input-cpf, .input-phone{width:calc(33.333333% - 16px);}.input-address, .paper-button-container{width:calc(100% - 16px);}.paper-button-container{margin:8px;text-align:center;}@media screen and (max-width: 768px){.input-name, .input-email, .input-cpf, .input-phone{width:calc(100% - 16px);}}</style>    
+
+    <page-header no-search-bar="" no-main-menu=""></page-header>
+
+    <div class="container">
+      <header>              
+        <h2 class="page-title">Aguarde</h2>
+
+        <div class="divider">
+          <div class="divider-border"></div>
+        </div>        
+                      
+        <p>O nosso serviço ainda está em fase de testes, e disponível apenas para alguns usuários.</p>
+        <p>
+          Preencha o formulário abaixo com os seus dados, 
+          e entraremos em contato assim que pudermos oferecer o serviço para você.
+        </p>
+      </header>                                            
+
+      <main>        
+        <form is="iron-form" id="registrationForm" action="" accept-charset="UTF-8" method="post" on-iron-form-presubmit="onRegistrationFormPreSubmit">
+          <paper-input auto-validate="" error-message="Por favor digite seu nome completo" name="name" class="input input-name" label="Nome Completo" required=""></paper-input>
+
+          <cpf-input auto-validate="" error-message="Por favor digite um cpf válido" name="cpf" class="input input-cpf" label="Cpf" required=""></cpf-input>
+
+          <gold-email-input class="input input-email" auto-validate="" name="email" label="Email" error-message="Por favor digite um email válido" value="[[email]]" required=""></gold-email-input>
+
+          <phone-input class="input input-phone" auto-validate="" name="phone" label="Telefone" error-message="Por favor digite um telefone válido" required=""></phone-input>
+
+          <paper-textarea name="addr" class="input input-address" label="Qual o endereço principal para entregas?" rows="5"></paper-textarea>
+
+          <div class="paper-button-container">                
+            <paper-button raised="" on-tap="onSendFormButtonTap">Enviar</paper-button>                
+          </div>              
+        </form>        
+      </main>       
+    </div>
+
+    <paper-toast id="toast" text="Enviando requisição de cadastro..." duration="0">
+    </paper-toast>
+    <page-footer></page-footer>
+  </template>
+
+  <script>!function(e,o,t,s,r){Polymer({is:"register-page",properties:{route:Object,email:String},onRegistrationFormPreSubmit:function(e){e.preventDefault();var o=this.$.toast,t=s.modals.message,r=this;o.open(),s.api.user.register(this.$.registrationForm.serialize()).then(function(e){o.close(),t.message="Sua solicitação de acesso foi registrada com sucesso. Em breve entraremos em contato.",t.title="Solicitação registrada com sucesso",t.open();var s=function(){t.removeEventListener("iron-overlay-closed",s),r.set("route.path","/")};t.addEventListener("iron-overlay-closed",s)}).catch(function(e){o.close(),t.title="Erro",t.message="CONFLICT"===e.status?"O email ou cpf fornecidos já estão cadastrados.":"Aconteceu um erro ao registrar a sua solicitação. Por favor tente novamente em alguns instantes.",t.open()})},onSendFormButtonTap:function(){this.$.registrationForm.validate()&&this.$.registrationForm.submit()}})}(window,document,void 0,paneiro,jambo);</script>
+</dom-module>
+</body></html>

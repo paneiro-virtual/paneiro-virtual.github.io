@@ -1,0 +1,1 @@
+module.exports=function(e){e.registerTask("build",["jshint:beforeConcat","concat","uglify"])};

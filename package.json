@@ -1,0 +1,26 @@
+{
+  "name": "paneiro-web",
+  "version": "3.0.0",
+  "description": "Web version of Paneiro Virtual e-commerce.",
+  "main": "index.html",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/paneiro-virtual/paneiro-web.git"
+  },
+  "author": "Andrew C. Pacifico <andrewcpacifico@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/paneiro-virtual/paneiro-web/issues"
+  },
+  "homepage": "https://gitlab.com/paneiro-virtual/paneiro-web#README",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-compass": "^1.1.1",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}

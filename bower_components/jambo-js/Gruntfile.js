@@ -1,0 +1,1 @@
+module.exports=function(r){r.initConfig({pkg:r.file.readJSON("./package.json")}),require("./grunt/concat")(r),require("./grunt/jshint")(r),require("./grunt/uglify")(r),require("./grunt/workflow")(r)};

@@ -1,0 +1,7 @@
+{
+  "name": "paneiro-web",
+  "short_name": "paneiro-web",
+  "description": "Paneiro Virtual Web Store",
+  "start_url": "/",
+  "display": "standalone"
+}

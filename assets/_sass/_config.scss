@@ -1,0 +1,45 @@
+// To enable support for browsers that do not support @media queries,
+// (IE <= 8, Firefox <= 3, Opera <= 9) set $mq-responsive to false
+// Create a separate stylesheet served exclusively to these browsers,
+// meaning @media queries will be rasterized, relying on the cascade itself
+$mq-responsive: true;
+
+// Name your breakpoints in a way that creates a ubiquitous language
+// across team members. It will improve communication between
+// stakeholders, designers, developers, and testers.
+$mq-breakpoints: (
+    mobile:  320px,
+    tablet:  768px,
+    desktop: 980px,
+    wide:    1200px,
+
+    // Tweakpoints
+    desktopAd: 810px,
+    mobileLandscape: 480px
+);
+
+// Define the breakpoint from the $mq-breakpoints list that should
+// be used as the target width when outputting a static stylesheet
+// (i.e. when $mq-responsive is set to 'false').
+$mq-static-breakpoint: desktop;
+
+// If you want to display the currently active breakpoint in the top
+// right corner of your site during development, add the breakpoints
+// to this list, ordered by width, e.g. (mobile, tablet, desktop).
+//$mq-show-breakpoints: (mobile, mobileLandscape, tablet, desktop, wide);
+@import '../../bower_components/sass-mq/mq';
+
+$totalGridColumns: 12;
+$containerWidth: (
+  mobile: 100%,
+  tablet: 750px,
+  desktop: 970px,
+  wide: 1170px
+);
+
+$baseFontSize: 15px;
+$fontFamily: "Myriad Pro Regular", Helvetica, Arial, Sans-serif;
+$baseLineHeight: 1.42857;
+
+$bodyTextColor: #263542;
+$pTextColor: #7f8683;

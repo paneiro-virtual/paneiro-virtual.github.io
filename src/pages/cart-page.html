@@ -1,0 +1,55 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+</head><body><dom-module id="cart-page">
+  <template>
+    <style>:host{display:block;}</style>
+
+    <template is="dom-if" if="{{cart.items.length}}">
+      <div class="cart-drawer-item-list">
+        <template is="dom-repeat" items="{{cart.items}}">
+          <paper-item class="cart-drawer-item">
+            <paper-icon-button icon="close" on-tap="onRemoveCartItemTap"></paper-icon-button>
+            <img src="{{item.img}}" style="width: 56px">
+
+            <paper-item-body two-line="" class="cart-drawer-item-body">
+              <div class="cart-drawer-ptitle">{{item.title}}</div>
+              <div>
+                <div class="cart-drawer-pprice">{{currencyFormat(item.price)}}</div>
+                <div class="cart-drawer-pqty">
+                  <paper-icon-button icon="remove-circle" on-tap="onDecCartItemQtyTap"></paper-icon-button>
+                  <span>{{item.qty}}</span>
+                  <paper-icon-button icon="add-circle" on-tap="onIncCartItemQtyTap"></paper-icon-button>
+                </div>
+              </div>
+            </paper-item-body>
+
+            <div class="cart-drawer-item-total-price">{{totalCartItemPrice(item.qty, item.price)}}</div>
+          </paper-item>
+        </template>
+      </div>
+
+      <div class="cart-drawer-footer">
+        <div class="cart-total">
+          <div>
+            <span class="cart-shipping-label">Taxa de entrega:</span>
+            <span class="cart-shipping-price">R$ 9,90</span>
+          </div>
+          <div>
+            <span class="cart-total-label">Total:</span>
+            <span class="cart-total-value">{{totalCartPrice(cart.total)}}</span>
+          </div>
+        </div>
+
+        <paper-button raised="" class="checkout-button">Finalizar Compra</paper-button>
+      </div>
+    </template>
+
+    <template is="dom-if" if="{{!cart.items.length}}">
+      <div class="no-cart-item-message">
+        Você não possui nenhum item no seu carrinho
+      </div>
+    </template>
+  </template>
+  <script>Polymer({is:"cart-page",properties:{cart:Object}});</script>
+</dom-module>
+</body></html>

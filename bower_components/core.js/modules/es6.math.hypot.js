@@ -1,0 +1,1 @@
+var $export=require("./_export"),abs=Math.abs;$export($export.S,"Math",{hypot:function(r,t){for(var a,e,o=0,h=0,p=arguments.length,n=0;h<p;)a=abs(arguments[h++]),n<a?(e=n/a,o=o*e*e+1,n=a):a>0?(e=a/n,o+=e*e):o+=a;return n===1/0?1/0:n*Math.sqrt(o)}});

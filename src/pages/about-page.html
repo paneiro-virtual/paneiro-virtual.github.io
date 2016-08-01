@@ -1,0 +1,108 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../paneiro-theme.html">
+<link rel="import" href="../partials/page-header.html">
+<link rel="import" href="../partials/page-footer.html">
+<link rel="import" href="../elements/phone-input.html">
+<link rel="import" href="../elements/cpf-input.html">
+
+</head><body><dom-module id="about-page">
+  <template>
+    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}main{padding:48px 8px;}.page-title{@apply (--paper-font-display1);margin-bottom:20px;font-weight:300;text-align:center;}.divider{height:1px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}.divider-border{height:100%;width:100px;max-width:100%;background:var(--primary-color);}h2{@apply (--paper-font-title);white-space:initial;}p{@apply (--paper-font-body1);}hr{margin-top:20px;margin-bottom:20px;border:0;border-top:1px solid #eee;}a{color:var(--primary-color);text-decoration:none;}#social-icons{text-align:center;}#social-icons img{margin:10px 5px;width:40px;}</style>    
+
+    <page-header></page-header>
+
+    <div class="container">
+      <header>              
+        <h2 class="page-title">Sobre Nós</h2>
+
+        <div class="divider">
+          <div class="divider-border"></div>
+        </div>                                      
+      </header>                                            
+
+      <main>        
+        <h2>
+          Cansado de desperdiçar seu tempo e se estressar sempre que precisa fazer compras?
+        </h2>
+
+        <p>
+          Está cansado de perder tempo em estacionamento, filas, engarrafamentos toda vez que precisa
+          ir ao supermercado?
+        </p>
+        <p>
+          Cansado de ser mal atendido, e as vezes tratado como se estivesse fazendo um favor ao
+          estabelecimento indo fazer compras naquele local?
+        </p>
+        <p>
+          Nós também.
+        </p>
+
+        <hr>
+
+        <h2>
+          Bem vindo ao Paneiro Virtual!
+        </h2>
+
+        <p>
+          Somos uma empresa jovem e genuinamente Amazonense, criada com o objetivo de promover a
+          melhor experiência de compra possível para os nossos clientes.
+        </p>
+        <p>
+          Faça suas compras online, agende a entrega e receba seus produtos em casa, sem dor de cabeça,
+          sem perda de tempo, sem problemas!
+        </p>
+
+        <hr>
+
+        <h2>
+          Sua satisfação é nossa prioridade!
+        </h2>
+
+        <p>
+          Qualidade no serviço e no atendimento é a nossa principal prioridade. Estamos sempre dispostos
+          a ouvir os nossos clientes. 
+        </p>
+        <p>
+          Dúvidas? Reclamações? Sugestões? <a href="//paneirovirtual.com/fale-conosco">Manda aí</a> 
+          que já já te respondemos maninha(o). =D
+        </p>
+
+        <hr>
+
+        <h2>#euAmoOPaneiroVirtual</h2>
+
+        <p>
+          Gostou da ideia? Então siga-nos nas redes sociais e fique sabendo de nossas novidades sempre
+          em primeira mão.
+
+          </p><div id="social-icons">
+            <a href="http://facebook.com/paneirovirtual" target="_blank">
+              <img src="/assets/img/fb.png" alt="Facebook">
+            </a>
+            <a href="http://twitter.com/paneirovirtual" target="_blank">
+              <img src="/assets/img/tw.png" alt="Twitter">
+            </a>
+          </div>
+        <p></p>
+      </main>       
+    </div>
+
+    <paper-toast id="toast" text="Enviando requisição de cadastro..." duration="0">
+    </paper-toast>
+    <page-footer></page-footer>
+  </template>
+
+  <script>!function(o,i,n,a,e){Polymer({is:"about-page"})}(window,document,void 0,paneiro,jambo);</script>
+</dom-module>
+</body></html>

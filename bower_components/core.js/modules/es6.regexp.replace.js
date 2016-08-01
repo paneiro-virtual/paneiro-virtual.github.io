@@ -1,0 +1,1 @@
+require("./_fix-re-wks")("replace",2,function(r,i,e){return[function(t,n){"use strict";var c=r(this),u=void 0==t?void 0:t[i];return void 0!==u?u.call(t,c,n):e.call(String(c),t,n)},e]});

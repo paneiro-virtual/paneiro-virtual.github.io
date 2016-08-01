@@ -1,0 +1,1 @@
+module.exports=function(s){s.config("cssmin",{dist:{files:{"./assets/css/paneiro.css":["./assets/css/paneiro.css"]}}}),s.loadNpmTasks("grunt-contrib-cssmin")};

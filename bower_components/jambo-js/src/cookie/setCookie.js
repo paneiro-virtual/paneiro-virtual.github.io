@@ -1,0 +1,1 @@
+jambo.setCookie=function(e,i,o){o=o||{};var t="";if(void 0!==o.expires&&o.expires!==1/0&&"number"==typeof o.expires){var a=new Date;a.setTime(a.getTime()+60*o.expires*1e3),t="; expires="+a.toString()}document.cookie=e+"="+i+t+(void 0!==o.domain?"; domain="+o.domain:"")+(void 0!==o.path?"; path="+o.path:"")};

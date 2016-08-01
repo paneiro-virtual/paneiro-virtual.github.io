@@ -1,0 +1,1 @@
+var $export=require("./_export");$export($export.S,"Math",{iaddh:function(r,e,t,o){var a=r>>>0,p=e>>>0,x=t>>>0;return p+(o>>>0)+((a&x|(a|x)&~(a+x>>>0))>>>31)|0}});

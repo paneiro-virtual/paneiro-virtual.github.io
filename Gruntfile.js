@@ -1,0 +1,1 @@
+module.exports=function(e){e.initConfig({pkg:e.file.readJSON("package.json")}),require("./grunt/compass")(e),require("./grunt/cssmin")(e),require("./grunt/watch")(e)};

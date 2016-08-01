@@ -1,0 +1,1 @@
+var $export=require("./_export");$export($export.S,"Math",{isubh:function(r,e,t,o){var p=r>>>0,u=e>>>0,x=t>>>0;return u-(o>>>0)-((~p&x|~(p^x)&p-x>>>0)>>>31)|0}});

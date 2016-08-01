@@ -1,0 +1,1 @@
+module.exports=function(i){i.config("uglify",{dist:{files:{"dist/jambo.min.js":["dist/jambo.js"]}}}),i.loadNpmTasks("grunt-contrib-uglify")};

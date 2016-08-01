@@ -1,0 +1,6 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+
+
+
+<script>"use strict";!function(){Polymer.AppMetadata=Polymer({is:"app-metadata",properties:{data:{type:Object,value:{},observer:"_dataChanged"},_meta:{type:Object,value:{}}},created:function(){Polymer.AppMetadata.instance||(Polymer.AppMetadata.instance=this),document.body.addEventListener("app-metadata",this._onAppMetadata.bind(this))},_dataChanged:function(t,a){var e=[];for(var n in this.data)if(this.data.hasOwnProperty(n)){if("title"===n)document.title=this.data[n];else if(this._meta.hasOwnProperty(n))this._meta[n].content=this.data[n];else{var d=document.createElement("meta");d.name=n,d.content=this.data[n],document.head.appendChild(d),this._meta[n]=d}e.push(n)}for(var n in this._meta)this._meta.hasOwnProperty(n)&&e.indexOf(n)===-1&&(document.head.removeChild(this._meta[n]),delete this._meta[n])},_onAppMetadata:function(t){t.detail&&"object"==typeof t.detail&&this.set("data",t.detail)}}),Polymer.AppMetadata.instance=null,Polymer.AppMetadata.requestAvailability=function(){Polymer.AppMetadata.instance||(Polymer.AppMetadata.instance=document.createElement("app-metadata"),document.body.appendChild(Polymer.AppMetadata.instance))}}();</script>
+</head><body></body></html>

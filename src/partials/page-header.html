@@ -1,0 +1,32 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../paneiro-theme.html">
+
+</head><body><dom-module id="page-header">
+  <template>
+    <style type="text/css">:host{display:block;}app-header{background:var(--primary-color);color:#fff;}#headerLogo{display:inline-block;height:auto;margin-left:20px;width:200px;vertical-align:middle;}</style>    
+    
+    <app-header-layout>
+      <app-header shadow="" condenses="" fixed="" reveals="" effects="blend-background">
+        <app-toolbar>
+          <div id="headerLogoContainer">
+            <a href="/">
+              <img src="/assets/img/paneiro-logo-white.png" alt="Paneiro Virtual Logo" id="headerLogo">
+            </a>            
+          </div>                                                  
+        </app-toolbar>                
+      </app-header>
+    </app-header-layout>            
+  </template>
+
+  <script>Polymer({is:"page-header"});</script>
+</dom-module>
+</body></html>

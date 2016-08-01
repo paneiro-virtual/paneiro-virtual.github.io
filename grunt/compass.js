@@ -1,0 +1,1 @@
+module.exports=function(s){s.config("compass",{options:{noLineComments:!0},dev:{options:{outputStyle:"expanded",sassDir:"./assets/_sass",cssDir:"./assets/css"}}}),s.loadNpmTasks("grunt-contrib-compass")};

@@ -1,0 +1,1 @@
+module.exports=function(o){for(var s=process.cwd(),c=require(s+"/config.js"),r=0,t=c.length;r<t;++r)c[r]="./src/"+c[r]+".js";o.config("concat",{dist:{src:["./node_modules/promise-polyfills/promise.js","./src/intro.js"].concat(c).concat(["./src/outro.js"]),dest:"dist/jambo.js"}}),o.loadNpmTasks("grunt-contrib-concat")};

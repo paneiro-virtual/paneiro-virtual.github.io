@@ -1,0 +1,38 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-metadata/app-metadata.html">
+
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+
+
+<link rel="import" href="../elements/pnr-modal.html">
+<link rel="import" href="../pages/landing-page.html">
+
+</head><body><dom-module id="paneiro-web-app">
+  <template>    
+    <style>:host{display:block;}#loadingPaperProgress{--paper-progress-active-color:var(--accent-color);--paper-progress-transition-duration:2s;--paper-progress-container-color:transparent;position:fixed;top:0;z-index:2;width:100%;}</style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subRoute}}">
+    </app-route>
+
+    <iron-pages selected="[[page]]" attr-for-selected="name">
+      <landing-page name="landing" route="{{route}}"></landing-page>
+      <store-main-page name="loja" route="{{subRoute}}" categories="[[categories]]"></store-main-page>
+      <register-page name="cadastro" route="{{route}}"></register-page>
+      <about-page name="sobre"></about-page>
+      <contact-page name="fale-conosco"></contact-page>      
+    </iron-pages>
+
+    <paper-progress id="loadingPaperProgress" value="0" class="transiting"></paper-progress>
+    <div id="global-modals-container">
+      <pnr-modal id="messageModal"></pnr-modal>                  
+    </div>
+  </template>
+
+  <script>!function(e,a,t,o,r){var i={title:"Paneiro Virtual - O seu supermercado online em Manaus.",description:"Nunca mais perca tempo em filas de supermercado. Tempo é dinheiro, compre no Paneiro!",keywords:"paneirovirtual,paneiro,virtual,supermercado,manaus,online,economia,delivery","twitter:card":"summary","twitter:site":"@paneirovirtual","twitter:title":"Paneiro Virtual - O seu supermercado online em Manaus.","twitter:description":"Nunca mais perca tempo em filas de supermercado. Tempo é dinheiro, compre no Paneiro!"},n={loja:{page:"store-main",pageMetadata:{title:"Loja",description:"Loja",keywords:"loja,paneiro,virtual"}},landing:{page:"landing",pageMetadata:i},cadastro:{page:"register",pageMetadata:{title:"Paneiro Virtual - Aguarde"}},sobre:{page:"about",pageMetadata:{title:"Paneiro Virtual - Sobre Nós"}},"fale-conosco":{page:"contact",pageMetadata:{title:"Paneiro Virtual - Fale Conosco",description:"Deseja entrar em contato com a equipe do Paneiro Virtual? Envie sua mensagem que nós retornamos o mais rápido possível."}}};Polymer({is:"paneiro-web-app",properties:{page:{route:Object,routeData:Object,subRoute:Object,type:String,reflectToAttribute:!0,observer:"_pageChanged"},categories:{type:Object,value:o.config.categories}},created:function(){Polymer.AppMetadata.requestAvailability()},ready:function(){o.sharedElements={loadingProgress:this.$.loadingPaperProgress},o.modals={message:this.$.messageModal}},observers:["_routePageChanged(routeData.page)"],_routePageChanged:function(e){this.page=e||"landing"},_pageChanged:function(a){e.scrollTo(0,0),n[a]!==t&&(this.fire("app-metadata",n[a].pageMetadata),this.importHref(this.resolveUrl("../pages/"+n[a].page+"-page.html"),null,null,!0))}})}(window,document,void 0,paneiro,jambo);</script>
+</dom-module>
+</body></html>

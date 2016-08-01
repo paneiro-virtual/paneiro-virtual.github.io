@@ -1,0 +1,110 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-location/iron-location.html">
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+
+<link rel="import" href="../paneiro-theme.html">
+<link rel="import" href="../partials/page-footer.html">
+
+</head><body><dom-module id="landing-page">
+  <template>
+    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}#landingHeader{background:transparent;height:600px;margin-bottom:30px;padding:30px 0;position:relative;}#landingHeaderBackground{background:url('../../assets/img/header-background-3.png');background-position:center center;height:600px;padding:30px 0;position:fixed;top:0;left:0;right:0;z-index:-1;}#landing-content{background:#fff;}.header-content{color:#000;display:block;padding:8px;text-align:center;width:100%;position:absolute;top:50%;left:50%;-ms-transform:translate(-50%, -50%);-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%);}#headerLogo{max-width:100%;width:800px;}#headerSlogan{@apply (--paper-font-display1);margin:32px 0;}.call-to-action-btn{@apply (--paper-font-button);background:var(--primary-color);color:#fff;font-size:1.5em;height:72px;width:270px;}.landing-section-title{@apply (--paper-font-display1);margin:0;text-align:center;}#landing-instructions{font-size:1.188em;margin-top:70px;}.landing-instructions-item{width:25%;text-align:center;}.landing-instruction-desc{display:inline-block;margin-top:20px;text-align:center;width:80%;}.landing-instruction-icon{width:70%;}.section{padding-top:20px;padding-bottom:20px;}paper-button{color:var(--primary-color);font-weight:bold;}#loadingMsg{margin:10px 0;}#loadingMsg > paper-spinner-lite{margin-right:10px;vertical-align:middle;}#comprar{text-align:center;}@media screen and (max-width: 980px){.landing-instructions-item{margin-bottom:20px;width:100%;}.landing-instructions-item > img{max-width:30%;}}@media screen and (max-width: 768px){.landing-instructions-item > img{max-width:50%;}#headerSlogan{@apply (--paper-font-headline);font-weight:300;}}@media screen and (max-width: 480px){.call-to-action-btn{height:70px;width:200px;}}</style>    
+
+    <div id="landingHeaderBackground"></div>
+    <header id="landingHeader" class="section">
+      <div class="container">
+        <div class="header-content">
+          <img src="/assets/img/paneiro-logo.png" alt="Paneiro Virtual Logo" id="headerLogo">
+
+          <div id="headerSlogan">
+            Nunca mais perca tempo em filas de supermercado. <br> Tempo é dinheiro. Compre no paneiro!
+          </div>
+
+          <paper-button class="call-to-action-btn" on-tap="onCallToActionTap">
+            Comprar
+          </paper-button>
+        </div>        
+      </div>
+    </header>
+
+    <main id="landing-content">
+      <section id="como-funciona" class="section">
+        <div class="container">
+          <h1 class="landing-section-title">Como funciona ?</h1>
+          <div id="landing-instructions" class="row">
+            <div class="landing-instructions-item">
+              <img src="/assets/img/list.svg" alt="Lista de compras" class="landing-instruction-icon">
+
+              <div class="landing-instruction-desc">
+                Crie uma lista com os produtos desejados
+              </div>
+            </div>
+            <div class="landing-instructions-item">
+              <img src="/assets/img/delivery.svg" alt="Envie o pedido" class="landing-instruction-icon">
+
+              <div class="landing-instruction-desc">
+                Envie seu pedido
+              </div>
+            </div>
+            <div class="landing-instructions-item">
+              <img src="/assets/img/money.svg" alt="Escolha a forma de pagamento" class="landing-instruction-icon">
+
+              <div class="landing-instruction-desc">
+                Escolha a forma de pagamento
+              </div>
+            </div>
+            <div class="landing-instructions-item">
+              <img src="/assets/img/home.svg" alt="Receba as compras em casa" class="landing-instruction-icon">
+
+              <div class="landing-instruction-desc">
+                Receba suas compras sem sair de casa
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="comprar" class="section">
+        <paper-button class="call-to-action-btn" on-tap="onCallToActionTap">Comprar</paper-button>
+      </section>
+    </main>
+
+    <page-footer id="landingFooter"></page-footer>
+
+    <paper-dialog id="loginModal" with-backdrop="true">
+      <h2 id="modal-title">Qual o seu email?</h2>
+
+      <span id="loadingMsg" style="display: none">
+        <paper-spinner-lite alt="Autenticando usuário" active=""></paper-spinner-lite>Autenticando usuário        
+      </span>
+
+      <form id="loginModalForm" is="iron-form" on-iron-form-presubmit="onLoginModalFormPreSubmit">        
+        <gold-email-input label="Digite o seu email" auto-validate="" required="" error-message="Por favor digite um email válido" size="50" name="email"></gold-email-input>
+        <div class="buttons">
+          <paper-button on-tap="onLoginModalOkButtonTap">Verificar</paper-button>
+        </div>
+      </form>
+    </paper-dialog>
+
+    <paper-dialog id="errorModal" with-backdrop="true">            
+      <h2 id="errorModalTitle"></h2>        
+      <p id="errorModalMsg"></p>        
+      <div class="buttons">
+        <paper-button dialog-confirm="">Ok</paper-button>        
+      </div>              
+    </paper-dialog>
+  </template>
+
+  <script>!function(o,e,t,a,i){Polymer({is:"landing-page",properties:{route:Object},onCallToActionTap:function(){var o=i.getCookie("userToken");o&&""!==o?this.set("route.path","/loja/categoria/petshop"):(this.$.loadingMsg.style.display="none",this.$.loginModal.open())},onLoginModalOkButtonTap:function(){this.$.loginModalForm.validate()&&this.$.loginModalForm.submit()},onLoginModalFormPreSubmit:function(o){o.preventDefault(),this.$.loadingMsg.style.display="block";var e=this;i.ajax({url:"//api.paneirovirtual.com/v1/auth",method:"POST",data:this.$.loginModalForm.serialize()}).then(function(o){e.handleAuthSuccess(o)}).catch(function(o){e.handleAuthError(o)})},handleAuthSuccess:function(o){this.$.loginModal.close(),"OK"===o.status&&(i.setCookie("userToken",o.data,{path:"/",expires:1440}),a.userToken=o.data,this.set("route.path","/loja/categoria/petshop"))},handleAuthError:function(o){this.$.loginModal.close(),"ZERO_RESULTS"===o.status?this.set("route.path","/cadastro"):"NOT_AUTHORIZED"===o.status?(this.$.errorModalTitle.innerHTML="Seu cadastro já foi registrado.",this.$.errorModalMsg.innerHTML="Seu pedido de acesso já está registrado, em breve entraremos em contato.",this.$.errorModal.open()):(this.$.errorModalTitle.innerHTML="Erro ao autenticar usuário.",this.$.errorModalMsg.innerHTML="Aconteceu um erro ao validar o seu email. Por favor tente novamente em alguns instantes.",this.$.errorModal.open())}})}(window,document,void 0,paneiro,jambo);</script>
+</dom-module>
+</body></html>

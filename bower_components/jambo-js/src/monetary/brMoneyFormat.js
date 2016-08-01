@@ -1,0 +1,1 @@
+jambo.brMoneyFormat=function(o){var r=Math.floor(o/100),a=o%100,n=a>9?a+"":"0"+a;return"R$ "+r+","+n};

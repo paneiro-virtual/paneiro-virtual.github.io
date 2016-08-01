@@ -1,0 +1,1 @@
+var isObject=require("./_is-object"),isArray=require("./_is-array"),SPECIES=require("./_wks")("species");module.exports=function(r){var e;return isArray(r)&&(e=r.constructor,"function"!=typeof e||e!==Array&&!isArray(e.prototype)||(e=void 0),isObject(e)&&(e=e[SPECIES],null===e&&(e=void 0))),void 0===e?Array:e};

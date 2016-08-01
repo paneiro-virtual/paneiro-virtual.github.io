@@ -1,0 +1,1 @@
+jambo.deleteCookie=function(o,i){i=i||{},document.cookie=o+"=;"+(void 0!==i.domain?"; domain="+i.domain:"")+(void 0!==i.path?"; path="+i.path:"")+"; expires=Thu, 01 Jan 1970 00:00:01 GMT;"};

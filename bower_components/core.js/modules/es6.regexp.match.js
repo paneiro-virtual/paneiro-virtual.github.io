@@ -1,0 +1,1 @@
+require("./_fix-re-wks")("match",1,function(i,r,t){return[function(t){"use strict";var e=i(this),n=void 0==t?void 0:t[r];return void 0!==n?n.call(t,e):new RegExp(t)[r](String(e))},t]});

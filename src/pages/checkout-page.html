@@ -1,0 +1,169 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+
+<link rel="import" href="../../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+
+<link rel="import" href="../paneiro-theme.html">
+<link rel="import" href="../elements/phone-input.html">
+<link rel="import" href="../elements/cpf-input.html">
+
+</head><body><dom-module id="checkout-page">
+  <template>
+    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}header{padding:0 8px;}main{padding:48px 0;}.page-title{@apply (--paper-font-display1);margin-bottom:20px;font-weight:300;text-align:center;}.divider{height:1px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}.divider-border{height:100%;width:100px;max-width:100%;background:var(--primary-color);}paper-button{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:0;}#checkoutForm{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;}.input{margin:8px;}.input-name, .input-email{width:calc(66.666666% - 16px);}.input-cpf, .input-phone{width:calc(33.333333% - 16px);}.input-address, .paper-button-container{width:calc(100% - 16px);}.input-delivery-day, .input-delivery-time{width:calc(50% - 16px);}.paper-button-container{margin:8px;text-align:center;}@media screen and (max-width: 768px){.input-name, .input-email, .input-cpf, .input-phone{width:calc(100% - 16px);}}</style>            
+
+    <iron-location id="ironLocation"></iron-location>
+
+    <div class="container">
+      <header>              
+        <h2 class="page-title">Fechar Pedido</h2>
+
+        <div class="divider">
+          <div class="divider-border"></div>
+        </div>                                      
+      </header>                                            
+
+      <main>        
+        <form is="iron-form" id="checkoutForm" action="" accept-charset="UTF-8" method="post" on-iron-form-presubmit="onCheckoutFormPreSubmit">
+          <paper-input auto-validate="" error-message="Por favor digite seu nome completo" name="name" class="input input-name" label="Nome Completo" value$="{{user.name}}" disabled=""></paper-input>
+
+          <cpf-input auto-validate="" error-message="Por favor digite um cpf válido" name="cpf" class="input input-cpf" label="Cpf" value$="{{user.cpf}}" disabled=""></cpf-input>
+
+          <gold-email-input class="input input-email" auto-validate="" name="email" label="Email" error-message="Por favor digite um email válido" value$="{{user.email}}" disabled=""></gold-email-input>
+
+          <phone-input class="input input-phone" auto-validate="" name="phone" label="Telefone" error-message="Por favor digite um telefone válido" value$="{{user.phone}}" disabled=""></phone-input>
+
+          <paper-input name="addr" class="input input-address" label="Endereço para entrega" error-message="Por favor informe o endereço onde deseja receber o pedido." required=""></paper-input>
+
+          <paper-dropdown-menu id="dateMenu" label="Dia da entrega" class="input input-delivery-day" name="delivery-day" required="">
+            <paper-listbox class="dropdown-content" selected="0">
+              <template is="dom-repeat" items="{{days}}">
+                <paper-item data-value$="{{item.value}}">{{item.label}}</paper-item>                  
+              </template>              
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <paper-dropdown-menu id="timeMenu" label="Horário da entrega" class="input input-delivery-time" name="delivery-time" required="">
+            <paper-listbox class="dropdown-content" selected="0">                            
+              <paper-item data-value="12:00">12:00 - 14:00</paper-item>              
+              <paper-item data-value="14:00">14:00 - 16:00</paper-item>
+              <paper-item data-value="16:00">16:00 - 18:00</paper-item>
+              <paper-item data-value="18:00">18:00 - 20:00</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <div class="paper-button-container">                
+            <paper-button raised="" on-tap="onCheckoutFormButtonTap">Enviar</paper-button>                
+          </div>              
+        </form>        
+      </main>       
+    </div>
+
+    <paper-toast id="toast" text="Registrando pedido..." duration="0">
+    </paper-toast>    
+  </template>
+
+  <script>
+    (function(window, document, undefined, paneiro, jambo) {
+      Polymer({
+        is: 'checkout-page',
+
+        properties: {              
+          user: Object,
+          cart: Object,
+          days: {
+            type: Array,
+            notify: true
+          }
+        },
+
+        ready: function() {          
+          if (this.cart.items.length === 0) {
+            this.$.ironLocation.path = '/loja/categoria/petshop';
+          } else {
+            var weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            var d = new Date();
+            this.days = [];
+
+            if (d.getDay() <= 1) {
+              var diff = 3 - d.getDay();
+              d.setDate(d.getDate() + diff);
+            } else if (d.getDay() <= 4) {
+              var diff = 6 - d.getDay();
+              d.setDate(d.getDate() + diff);
+            } else {
+              var diff = 7 - d.getDay() + 3;
+              d.setDate(d.getDate() + diff);
+            }
+
+            for (var i = 0; i < 4; ++i) {
+              this.push('days', {
+                label: weekDays[d.getDay()] + ' - ' + d.getDate() + '/' + (d.getMonth() + 1),
+                value: d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
+              });            
+
+              if (d.getDay() === 3) {
+                d.setDate(d.getDate() + 3);
+              } else {
+                d.setDate(d.getDate() + 4);
+              }
+            }
+          }          
+        },
+
+        onCheckoutFormPreSubmit: function(e) {
+          e.preventDefault();
+
+          var toast = this.$.toast;
+          var modal = paneiro.modals.message;
+          var formData = this.$.checkoutForm.serialize();                    
+
+          toast.open();
+
+          var deliveryDatetime = this.$.dateMenu.selectedItem.getAttribute('data-value') + ' ' +
+            this.$.timeMenu.selectedItem.getAttribute('data-value');    
+          paneiro.api.purchase.checkout({
+            phone: this.user.phone,
+            addr: formData.addr,
+            deliveryDate: deliveryDatetime
+          }).then(response => {
+            toast.close();
+
+            modal.message = 'Seu pedido foi registrado com sucesso, e será entregue na data e horário agendados.\n' + 
+              'Caso seja necessário, entraremos em contato.\n' +
+              'Agradecemos a preferência e até a próxima!';  
+            modal.title = 'Pedido registrado com sucesso.';
+
+            modal.open();
+
+            this.set('cart.items', []);
+            this.set('cart.total', 0);            
+
+            this.$.ironLocation.set('path', '/loja/categoria/petshop');            
+          }).catch(response => console.log(response));          
+        },
+
+        onCheckoutFormButtonTap: function() {          
+          if (!this.$.checkoutForm.validate()) {
+            return;
+          } 
+
+          this.$.checkoutForm.submit();          
+        }
+      });
+    })(window, document, undefined, paneiro, jambo);    
+  </script>
+</dom-module>
+</body></html>

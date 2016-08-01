@@ -1,0 +1,112 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../paneiro-theme.html">
+
+</head><body><dom-module id="product-grid">
+  <template>
+    <style>:host{display:block;}.product-list{display:-ms-flexbox;display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;}.product-card{@apply (--paper-font-body1);margin:8px;width:calc(25% - 16px);--paper-card-header-image:{display:block;margin:16px auto;height:auto;width:100%;max-width:170px;};}.product-card-title{margin-bottom:8px;max-height:57px;min-height:57px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}.product-card-old-price-wrapper, .product-card-price-wrapper{text-align:right;}.product-card-old-price-wrapper{@apply (--paper-font-caption);color:var(--disabled-text-color);text-decoration:line-through;}.product-card-price{@apply (--paper-font-headline);color:var(--primary-color);}.product-card-add-to-cart-button{@apply (--paper-font-button);background:var(--primary-color);color:#fff;text-align:center;}.product-card-add-to-cart-button > iron-icon{margin-right:8px;}.card-actions *{display:inline-block;vertical-align:middle;}.card-actions{text-align:center;}.card-actions > paper-icon-button{color:var(--primary-color);}#loadMoreWrapper{text-align:center;}#loadMoreButton{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:16px;}@media screen and (max-width: 768px){.product-card{width:calc(50% - 16px);}.product-card-price{@apply (--paper-font-title);}.product-card-add-to-cart-button{display:block;margin:0;width:100%;}.add-to-cart-icon{display:none!important;}}</style>                                      
+    
+    <div class="product-list">
+      <template id="productList" is="dom-repeat" items="{{products}}" as="product">        
+        <paper-card class="product-card mdl-cell mdl-cell--3-col" image="{{product.img}}">
+          <div class="card-content">
+            <div class="product-card-title">{{product.title}}</div>
+
+            <div class="product-card-old-price-wrapper">
+              de <span class="product-card-old-price">{{currencyFormat(product.oldPrice)}}</span>
+            </div>              
+            <div class="product-card-price-wrapper">
+              por <span class="product-card-price">{{currencyFormat(product.price)}}</span>
+            </div>              
+          </div>
+          <div class="card-actions">
+            <paper-icon-button icon="remove-circle" on-tap="onDecQtyTap"></paper-icon-button>              
+            <span class="product-qty">{{product.qty}}</span>              
+            <paper-icon-button icon="add-circle" on-tap="onIncQtyTap"></paper-icon-button>
+            
+            <paper-button class="product-card-add-to-cart-button" on-tap="onAddToCartTap">                
+              <iron-icon icon="add-shopping-cart" class="add-to-cart-icon"></iron-icon>                
+              Adicionar
+            </paper-button>
+          </div>
+        </paper-card>                
+      </template>                                          
+                
+      <paper-toast id="addedToCartToast" text="Produto adicionado ao carrinho." duration="3000"></paper-toast>  
+        
+  </div></template>
+
+  <script>
+    (function(window, document, undefined, paneiro, jambo) {            
+      Polymer({
+        is: 'product-grid',
+
+        properties: {
+          cart: Object,                              
+          products: {
+            type: Array,
+            notify: true
+          },
+          page: Number                    
+        },         
+
+        currencyFormat: function(val) {
+          return paneiro.commons.currencyFormat(val);
+        },                                              
+
+        onIncQtyTap: function(e) {          
+          if (e.model.product.qty < 9) {
+            e.model.set('product.qty', e.model.product.qty + 1);
+          }          
+        },
+
+        onDecQtyTap: function(e) {          
+          if (e.model.product.qty > 0) {
+            e.model.set('product.qty', e.model.product.qty - 1);
+          }          
+        },
+
+        onAddToCartTap: function(e) {
+          var product = e.model.product;
+
+          var qty = product.qty;
+          var price = product.price;
+          
+          paneiro.api.cart.addProduct({
+            id: product.id,
+            qty: product.qty
+          }).then(response => {            
+            this.$.addedToCartToast.open();
+
+            var idx = this.cart.items.findIndex((element, index, array) => {
+              return element.id === product.id;
+            });            
+
+            if (idx > -1) {
+              this.set('cart.items.' + idx + '.qty', this.cart.items[idx].qty + qty);              
+            } else {
+              var p = jambo.deepExtend({}, product);
+              p.qty = qty;
+
+              this.push('cart.items', p);
+            }
+
+            this.set('cart.total', this.cart.total + qty*product.price);
+          }).catch(err => console.log(err));
+
+          e.model.set('product.qty', 1);
+        }        
+      });
+    })(window, document, undefined, paneiro, jambo);    
+  </script>
+</dom-module>
+</body></html>

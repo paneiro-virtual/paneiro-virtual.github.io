@@ -1,0 +1,1 @@
+jambo.addClass=function(a,e){for(var s="object"==typeof a&&a.length?a:[a],l=0,t=s.length;l<t;++l){var o=s[l].className+"";if(""===o)s[l].className=e;else{o=o.split(" ");for(var c=0,f=o.length;c<f&&o[c]!==e;++c);c===f&&(s[l].className+=" "+e)}}};

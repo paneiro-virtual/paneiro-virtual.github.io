@@ -1,0 +1,1 @@
+var UNSCOPABLES=require("./_wks")("unscopables"),ArrayProto=Array.prototype;void 0==ArrayProto[UNSCOPABLES]&&require("./_hide")(ArrayProto,UNSCOPABLES,{}),module.exports=function(r){ArrayProto[UNSCOPABLES][r]=!0};

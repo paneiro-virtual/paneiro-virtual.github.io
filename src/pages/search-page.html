@@ -1,0 +1,134 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="../elements/product-grid.html">
+
+</head><body><dom-module id="search-page">
+  <template>
+    <style>:host{display:block;}.main-content{padding:48px 8px;}#loadMoreWrapper{text-align:center;}#loadMoreButton{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:16px;}paper-spinner-lite{height:50px;width:50px;display:block;margin:0 auto;--paper-spinner-color:var(--primary-color);--paper-spinner-stroke-width:4px;}paper-spinner-lite:not([active]){display:none;}.page-title{@apply (--paper-font-display1);margin:0 8px 16px 0;}.not-found-wrapper{@apply (--paper-font-subhead);color:var(--secondary-text-color);margin-top:16px;}@media screen and (max-width: 780px){.page-title{@apply (--paper-font-headline);}}</style>
+    
+    <app-route id="appRoute" route="{{route}}" data="{{routeData}}" pattern="/busca" query-params="{{params}}"></app-route>
+
+    <main class="container main-content">
+      <div class="page-title">
+        Resultados de busca para "<span class="query">{{params.q}}</span>"
+      </div>      
+
+      <paper-spinner-lite id="loadingSpinner" active="{{firstLoad}}"></paper-spinner-lite>
+
+      <product-grid products="{{products}}" cart="{{cart}}"></product-grid>
+
+      
+      <template is="dom-if" if="{{emptyResult}}">
+        <div class="not-found-wrapper">
+          Sua busca não retornou nenhum resultado. <br>
+          Tente algo como:
+          <ul>
+            <li>Utilizar termos mais genéricos.</li>
+            <li>Checar a escrita dos termos.</li>
+          </ul>
+        </div>        
+      </template>      
+
+      <template is="dom-if" if="{{hasNext}}">
+        <div id="loadMoreWrapper">
+          <paper-button id="loadMoreButton" on-tap="onLoadMoreTap">Ver mais produtos</paper-button>
+        </div>
+      </template>
+    </main>    
+  </template>
+  <script>
+    (function(window, document, undefined, paneiro, jambo) {
+      Polymer({
+        is: 'search-page',
+
+        properties: {
+          cart: Object,
+          emptyResult: {
+            type: Boolean,
+            value: false
+          },
+          firstLoad: {
+            type: Boolean,
+            notify: true
+          },
+          hasNext: {
+            type: Boolean,
+            value: false
+          },
+          route: Object,
+          page: Number,
+          params: {
+            type: Object,
+            observer: '_paramsChanged'
+          },
+          products: {
+            type: Object,
+            notify: true
+          }        
+        },
+
+        _loadProducts: function() {
+          paneiro.api.product.search({
+            query: this.params.q,
+            page: this.page
+          }).then(response => {
+            if (this.page === 1) {
+              this.products = response.data;
+              this.products.forEach(product => {
+                product.qty = 1;
+              });
+              window.scrollTo(0, 0);
+            } else {              
+              response.data.forEach(product => {
+                product.qty = 1;
+                this.push('products', product);                
+              });
+            } 
+            
+            this.emptyResult = response.data.length === 0;
+            this.hasNext = (response.paging !== undefined && response.paging.next !== undefined);
+
+            if (!this.firstLoad) {
+              paneiro.sharedElements.loadingProgress.value = 100;
+              paneiro.sharedElements.loadingProgress.classList.remove('transiting');
+
+              setTimeout(() => {
+                paneiro.sharedElements.loadingProgress.value = 0;                
+              }, 300);                
+            }
+
+            this.firstLoad = false;
+          });
+        },
+
+        _paramsChanged: function(params) {
+          if (this.firstLoad) {
+            this.products = [];            
+          } else {
+            paneiro.sharedElements.loadingProgress.classList.add('transiting');            
+            paneiro.sharedElements.loadingProgress.value = 85;
+          }
+
+          this.emptyResult = false;
+          this.page = 1;
+          this._loadProducts();          
+        },
+
+        onLoadMoreTap: function() {
+          this.page++;
+          this._loadProducts();
+
+          if (!this.firstLoad) {            
+            paneiro.sharedElements.loadingProgress.classList.add('transiting');            
+            paneiro.sharedElements.loadingProgress.value = 85;
+          }
+        }
+      });
+    })(window, document, undefined, paneiro, jambo);    
+  </script>
+</dom-module>
+</body></html>

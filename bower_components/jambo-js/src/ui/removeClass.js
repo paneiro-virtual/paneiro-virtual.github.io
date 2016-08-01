@@ -1,0 +1,1 @@
+jambo.removeClass=function(a,e){for(var t="object"==typeof a&&a.length?a:[a],l=0,o=t.length;l<o;++l){var r=t[l].className+"";r=r.split(" ");for(var s="",m=0,n=r.length;m<n;++m)r[m]!==e&&(s+=r[m]+" ");t[l].className=s.trim()}};

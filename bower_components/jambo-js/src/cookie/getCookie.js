@@ -1,0 +1,1 @@
+jambo.getCookie=function(t){for(var n=t+"=",r=document.cookie.split(";"),e=0,o=r.length;e<o;++e){for(var i=r[e];" "===i.charAt(0);)i=i.substring(1);if(0===i.indexOf(n))return i.substring(n.length,i.length)}return""};
