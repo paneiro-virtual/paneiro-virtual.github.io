@@ -1,1 +1,9 @@
-var $export=require("./_export"),$entries=require("./_object-to-array")(!0);$export($export.S,"Object",{entries:function(e){return $entries(e)}});
+// https://github.com/tc39/proposal-object-values-entries
+var $export  = require('./_export')
+  , $entries = require('./_object-to-array')(true);
+
+$export($export.S, 'Object', {
+  entries: function entries(it){
+    return $entries(it);
+  }
+});

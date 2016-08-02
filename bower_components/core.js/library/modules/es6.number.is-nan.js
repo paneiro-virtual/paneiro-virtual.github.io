@@ -1,1 +1,8 @@
-var $export=require("./_export");$export($export.S,"Number",{isNaN:function(r){return r!=r}});
+// 20.1.2.4 Number.isNaN(number)
+var $export = require('./_export');
+
+$export($export.S, 'Number', {
+  isNaN: function isNaN(number){
+    return number != number;
+  }
+});

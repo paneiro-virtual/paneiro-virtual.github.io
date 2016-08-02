@@ -1,1 +1,199 @@
-"use strict";var $export=require("./_export"),global=require("./_global"),core=require("./_core"),microtask=require("./_microtask")(),OBSERVABLE=require("./_wks")("observable"),aFunction=require("./_a-function"),anObject=require("./_an-object"),anInstance=require("./_an-instance"),redefineAll=require("./_redefine-all"),hide=require("./_hide"),forOf=require("./_for-of"),RETURN=forOf.RETURN,getMethod=function(r){return null==r?void 0:aFunction(r)},cleanupSubscription=function(r){var e=r._c;e&&(r._c=void 0,e())},subscriptionClosed=function(r){return void 0===r._o},closeSubscription=function(r){subscriptionClosed(r)||(r._o=void 0,cleanupSubscription(r))},Subscription=function(r,e){anObject(r),this._c=void 0,this._o=r,r=new SubscriptionObserver(this);try{var t=e(r),n=t;null!=t&&("function"==typeof t.unsubscribe?t=function(){n.unsubscribe()}:aFunction(t),this._c=t)}catch(e){return void r.error(e)}subscriptionClosed(this)&&cleanupSubscription(this)};Subscription.prototype=redefineAll({},{unsubscribe:function(){closeSubscription(this)}});var SubscriptionObserver=function(r){this._s=r};SubscriptionObserver.prototype=redefineAll({},{next:function(r){var e=this._s;if(!subscriptionClosed(e)){var t=e._o;try{var n=getMethod(t.next);if(n)return n.call(t,r)}catch(r){try{closeSubscription(e)}finally{throw r}}}},error:function(r){var e=this._s;if(subscriptionClosed(e))throw r;var t=e._o;e._o=void 0;try{var n=getMethod(t.error);if(!n)throw r;r=n.call(t,r)}catch(r){try{cleanupSubscription(e)}finally{throw r}}return cleanupSubscription(e),r},complete:function(r){var e=this._s;if(!subscriptionClosed(e)){var t=e._o;e._o=void 0;try{var n=getMethod(t.complete);r=n?n.call(t,r):void 0}catch(r){try{cleanupSubscription(e)}finally{throw r}}return cleanupSubscription(e),r}}});var $Observable=function(r){anInstance(this,$Observable,"Observable","_f")._f=aFunction(r)};redefineAll($Observable.prototype,{subscribe:function(r){return new Subscription(r,this._f)},forEach:function(r){var e=this;return new(core.Promise||global.Promise)(function(t,n){aFunction(r);var i=e.subscribe({next:function(e){try{return r(e)}catch(r){n(r),i.unsubscribe()}},error:n,complete:t})})}}),redefineAll($Observable,{from:function(r){var e="function"==typeof this?this:$Observable,t=getMethod(anObject(r)[OBSERVABLE]);if(t){var n=anObject(t.call(r));return n.constructor===e?n:new e(function(r){return n.subscribe(r)})}return new e(function(e){var t=!1;return microtask(function(){if(!t){try{if(forOf(r,!1,function(r){if(e.next(r),t)return RETURN})===RETURN)return}catch(r){if(t)throw r;return void e.error(r)}e.complete()}}),function(){t=!0}})},of:function(){for(var r=0,e=arguments.length,t=Array(e);r<e;)t[r]=arguments[r++];return new("function"==typeof this?this:$Observable)(function(r){var e=!1;return microtask(function(){if(!e){for(var n=0;n<t.length;++n)if(r.next(t[n]),e)return;r.complete()}}),function(){e=!0}})}}),hide($Observable.prototype,OBSERVABLE,function(){return this}),$export($export.G,{Observable:$Observable}),require("./_set-species")("Observable");
+'use strict';
+// https://github.com/zenparsing/es-observable
+var $export     = require('./_export')
+  , global      = require('./_global')
+  , core        = require('./_core')
+  , microtask   = require('./_microtask')()
+  , OBSERVABLE  = require('./_wks')('observable')
+  , aFunction   = require('./_a-function')
+  , anObject    = require('./_an-object')
+  , anInstance  = require('./_an-instance')
+  , redefineAll = require('./_redefine-all')
+  , hide        = require('./_hide')
+  , forOf       = require('./_for-of')
+  , RETURN      = forOf.RETURN;
+
+var getMethod = function(fn){
+  return fn == null ? undefined : aFunction(fn);
+};
+
+var cleanupSubscription = function(subscription){
+  var cleanup = subscription._c;
+  if(cleanup){
+    subscription._c = undefined;
+    cleanup();
+  }
+};
+
+var subscriptionClosed = function(subscription){
+  return subscription._o === undefined;
+};
+
+var closeSubscription = function(subscription){
+  if(!subscriptionClosed(subscription)){
+    subscription._o = undefined;
+    cleanupSubscription(subscription);
+  }
+};
+
+var Subscription = function(observer, subscriber){
+  anObject(observer);
+  this._c = undefined;
+  this._o = observer;
+  observer = new SubscriptionObserver(this);
+  try {
+    var cleanup      = subscriber(observer)
+      , subscription = cleanup;
+    if(cleanup != null){
+      if(typeof cleanup.unsubscribe === 'function')cleanup = function(){ subscription.unsubscribe(); };
+      else aFunction(cleanup);
+      this._c = cleanup;
+    }
+  } catch(e){
+    observer.error(e);
+    return;
+  } if(subscriptionClosed(this))cleanupSubscription(this);
+};
+
+Subscription.prototype = redefineAll({}, {
+  unsubscribe: function unsubscribe(){ closeSubscription(this); }
+});
+
+var SubscriptionObserver = function(subscription){
+  this._s = subscription;
+};
+
+SubscriptionObserver.prototype = redefineAll({}, {
+  next: function next(value){
+    var subscription = this._s;
+    if(!subscriptionClosed(subscription)){
+      var observer = subscription._o;
+      try {
+        var m = getMethod(observer.next);
+        if(m)return m.call(observer, value);
+      } catch(e){
+        try {
+          closeSubscription(subscription);
+        } finally {
+          throw e;
+        }
+      }
+    }
+  },
+  error: function error(value){
+    var subscription = this._s;
+    if(subscriptionClosed(subscription))throw value;
+    var observer = subscription._o;
+    subscription._o = undefined;
+    try {
+      var m = getMethod(observer.error);
+      if(!m)throw value;
+      value = m.call(observer, value);
+    } catch(e){
+      try {
+        cleanupSubscription(subscription);
+      } finally {
+        throw e;
+      }
+    } cleanupSubscription(subscription);
+    return value;
+  },
+  complete: function complete(value){
+    var subscription = this._s;
+    if(!subscriptionClosed(subscription)){
+      var observer = subscription._o;
+      subscription._o = undefined;
+      try {
+        var m = getMethod(observer.complete);
+        value = m ? m.call(observer, value) : undefined;
+      } catch(e){
+        try {
+          cleanupSubscription(subscription);
+        } finally {
+          throw e;
+        }
+      } cleanupSubscription(subscription);
+      return value;
+    }
+  }
+});
+
+var $Observable = function Observable(subscriber){
+  anInstance(this, $Observable, 'Observable', '_f')._f = aFunction(subscriber);
+};
+
+redefineAll($Observable.prototype, {
+  subscribe: function subscribe(observer){
+    return new Subscription(observer, this._f);
+  },
+  forEach: function forEach(fn){
+    var that = this;
+    return new (core.Promise || global.Promise)(function(resolve, reject){
+      aFunction(fn);
+      var subscription = that.subscribe({
+        next : function(value){
+          try {
+            return fn(value);
+          } catch(e){
+            reject(e);
+            subscription.unsubscribe();
+          }
+        },
+        error: reject,
+        complete: resolve
+      });
+    });
+  }
+});
+
+redefineAll($Observable, {
+  from: function from(x){
+    var C = typeof this === 'function' ? this : $Observable;
+    var method = getMethod(anObject(x)[OBSERVABLE]);
+    if(method){
+      var observable = anObject(method.call(x));
+      return observable.constructor === C ? observable : new C(function(observer){
+        return observable.subscribe(observer);
+      });
+    }
+    return new C(function(observer){
+      var done = false;
+      microtask(function(){
+        if(!done){
+          try {
+            if(forOf(x, false, function(it){
+              observer.next(it);
+              if(done)return RETURN;
+            }) === RETURN)return;
+          } catch(e){
+            if(done)throw e;
+            observer.error(e);
+            return;
+          } observer.complete();
+        }
+      });
+      return function(){ done = true; };
+    });
+  },
+  of: function of(){
+    for(var i = 0, l = arguments.length, items = Array(l); i < l;)items[i] = arguments[i++];
+    return new (typeof this === 'function' ? this : $Observable)(function(observer){
+      var done = false;
+      microtask(function(){
+        if(!done){
+          for(var i = 0; i < items.length; ++i){
+            observer.next(items[i]);
+            if(done)return;
+          } observer.complete();
+        }
+      });
+      return function(){ done = true; };
+    });
+  }
+});
+
+hide($Observable.prototype, OBSERVABLE, function(){ return this; });
+
+$export($export.G, {Observable: $Observable});
+
+require('./_set-species')('Observable');

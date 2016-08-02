@@ -1,1 +1,7 @@
-"use strict";require("./_string-html")("fixed",function(t){return function(){return t(this,"tt","","")}});
+'use strict';
+// B.2.3.6 String.prototype.fixed()
+require('./_string-html')('fixed', function(createHTML){
+  return function fixed(){
+    return createHTML(this, 'tt', '', '');
+  }
+});

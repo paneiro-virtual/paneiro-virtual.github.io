@@ -1,1 +1,10 @@
-var getKeys=require("./_object-keys"),toIObject=require("./_to-iobject");module.exports=function(e,t){for(var r,o=toIObject(e),c=getKeys(o),i=c.length,u=0;i>u;)if(o[r=c[u++]]===t)return r};
+var getKeys   = require('./_object-keys')
+  , toIObject = require('./_to-iobject');
+module.exports = function(object, el){
+  var O      = toIObject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};

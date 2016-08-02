@@ -1,1 +1,155 @@
-"use strict";function Dict(e){var t=create(null);return void 0!=e&&(isIterable(e)?forOf(e,!0,function(e,r){t[e]=r}):assign(t,e)),t}function reduce(e,t,r){aFunction(t);var i,c,o=toIObject(e),n=getKeys(o),s=n.length,u=0;if(arguments.length<3){if(!s)throw TypeError("Reduce of empty object with no initial value");i=o[n[u++]]}else i=Object(r);for(;s>u;)has(o,c=n[u++])&&(i=t(i,o[c],c,e));return i}function includes(e,t){return void 0!==(t==t?keyOf(e,t):findKey(e,function(e){return e!=e}))}function get(e,t){if(has(e,t))return e[t]}function set(e,t,r){return DESCRIPTORS&&t in Object?dP.f(e,t,createDesc(0,r)):e[t]=r,e}function isDict(e){return isObject(e)&&getPrototypeOf(e)===Dict.prototype}var ctx=require("./_ctx"),$export=require("./_export"),createDesc=require("./_property-desc"),assign=require("./_object-assign"),create=require("./_object-create"),getPrototypeOf=require("./_object-gpo"),getKeys=require("./_object-keys"),dP=require("./_object-dp"),keyOf=require("./_keyof"),aFunction=require("./_a-function"),forOf=require("./_for-of"),isIterable=require("./core.is-iterable"),$iterCreate=require("./_iter-create"),step=require("./_iter-step"),isObject=require("./_is-object"),toIObject=require("./_to-iobject"),DESCRIPTORS=require("./_descriptors"),has=require("./_has"),createDictMethod=function(e){var t=1==e,r=4==e;return function(i,c,o){var n,s,u,a=ctx(c,o,3),f=toIObject(i),h=t||7==e||2==e?new("function"==typeof this?this:Dict):void 0;for(n in f)if(has(f,n)&&(s=f[n],u=a(s,n,i),e))if(t)h[n]=u;else if(u)switch(e){case 2:h[n]=s;break;case 3:return!0;case 5:return s;case 6:return n;case 7:h[u[0]]=u[1]}else if(r)return!1;return 3==e||r?r:h}},findKey=createDictMethod(6),createDictIter=function(e){return function(t){return new DictIterator(t,e)}},DictIterator=function(e,t){this._t=toIObject(e),this._a=getKeys(e),this._i=0,this._k=t};$iterCreate(DictIterator,"Dict",function(){var e,t=this,r=t._t,i=t._a,c=t._k;do if(t._i>=i.length)return t._t=void 0,step(1);while(!has(r,e=i[t._i++]));return"keys"==c?step(0,e):"values"==c?step(0,r[e]):step(0,[e,r[e]])}),Dict.prototype=null,$export($export.G+$export.F,{Dict:Dict}),$export($export.S,"Dict",{keys:createDictIter("keys"),values:createDictIter("values"),entries:createDictIter("entries"),forEach:createDictMethod(0),map:createDictMethod(1),filter:createDictMethod(2),some:createDictMethod(3),every:createDictMethod(4),find:createDictMethod(5),findKey:findKey,mapPairs:createDictMethod(7),reduce:reduce,keyOf:keyOf,includes:includes,has:has,get:get,set:set,isDict:isDict});
+'use strict';
+var ctx            = require('./_ctx')
+  , $export        = require('./_export')
+  , createDesc     = require('./_property-desc')
+  , assign         = require('./_object-assign')
+  , create         = require('./_object-create')
+  , getPrototypeOf = require('./_object-gpo')
+  , getKeys        = require('./_object-keys')
+  , dP             = require('./_object-dp')
+  , keyOf          = require('./_keyof')
+  , aFunction      = require('./_a-function')
+  , forOf          = require('./_for-of')
+  , isIterable     = require('./core.is-iterable')
+  , $iterCreate    = require('./_iter-create')
+  , step           = require('./_iter-step')
+  , isObject       = require('./_is-object')
+  , toIObject      = require('./_to-iobject')
+  , DESCRIPTORS    = require('./_descriptors')
+  , has            = require('./_has');
+
+// 0 -> Dict.forEach
+// 1 -> Dict.map
+// 2 -> Dict.filter
+// 3 -> Dict.some
+// 4 -> Dict.every
+// 5 -> Dict.find
+// 6 -> Dict.findKey
+// 7 -> Dict.mapPairs
+var createDictMethod = function(TYPE){
+  var IS_MAP   = TYPE == 1
+    , IS_EVERY = TYPE == 4;
+  return function(object, callbackfn, that /* = undefined */){
+    var f      = ctx(callbackfn, that, 3)
+      , O      = toIObject(object)
+      , result = IS_MAP || TYPE == 7 || TYPE == 2
+          ? new (typeof this == 'function' ? this : Dict) : undefined
+      , key, val, res;
+    for(key in O)if(has(O, key)){
+      val = O[key];
+      res = f(val, key, object);
+      if(TYPE){
+        if(IS_MAP)result[key] = res;            // map
+        else if(res)switch(TYPE){
+          case 2: result[key] = val; break;     // filter
+          case 3: return true;                  // some
+          case 5: return val;                   // find
+          case 6: return key;                   // findKey
+          case 7: result[res[0]] = res[1];      // mapPairs
+        } else if(IS_EVERY)return false;        // every
+      }
+    }
+    return TYPE == 3 || IS_EVERY ? IS_EVERY : result;
+  };
+};
+var findKey = createDictMethod(6);
+
+var createDictIter = function(kind){
+  return function(it){
+    return new DictIterator(it, kind);
+  };
+};
+var DictIterator = function(iterated, kind){
+  this._t = toIObject(iterated); // target
+  this._a = getKeys(iterated);   // keys
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+};
+$iterCreate(DictIterator, 'Dict', function(){
+  var that = this
+    , O    = that._t
+    , keys = that._a
+    , kind = that._k
+    , key;
+  do {
+    if(that._i >= keys.length){
+      that._t = undefined;
+      return step(1);
+    }
+  } while(!has(O, key = keys[that._i++]));
+  if(kind == 'keys'  )return step(0, key);
+  if(kind == 'values')return step(0, O[key]);
+  return step(0, [key, O[key]]);
+});
+
+function Dict(iterable){
+  var dict = create(null);
+  if(iterable != undefined){
+    if(isIterable(iterable)){
+      forOf(iterable, true, function(key, value){
+        dict[key] = value;
+      });
+    } else assign(dict, iterable);
+  }
+  return dict;
+}
+Dict.prototype = null;
+
+function reduce(object, mapfn, init){
+  aFunction(mapfn);
+  var O      = toIObject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , i      = 0
+    , memo, key;
+  if(arguments.length < 3){
+    if(!length)throw TypeError('Reduce of empty object with no initial value');
+    memo = O[keys[i++]];
+  } else memo = Object(init);
+  while(length > i)if(has(O, key = keys[i++])){
+    memo = mapfn(memo, O[key], key, object);
+  }
+  return memo;
+}
+
+function includes(object, el){
+  return (el == el ? keyOf(object, el) : findKey(object, function(it){
+    return it != it;
+  })) !== undefined;
+}
+
+function get(object, key){
+  if(has(object, key))return object[key];
+}
+function set(object, key, value){
+  if(DESCRIPTORS && key in Object)dP.f(object, key, createDesc(0, value));
+  else object[key] = value;
+  return object;
+}
+
+function isDict(it){
+  return isObject(it) && getPrototypeOf(it) === Dict.prototype;
+}
+
+$export($export.G + $export.F, {Dict: Dict});
+
+$export($export.S, 'Dict', {
+  keys:     createDictIter('keys'),
+  values:   createDictIter('values'),
+  entries:  createDictIter('entries'),
+  forEach:  createDictMethod(0),
+  map:      createDictMethod(1),
+  filter:   createDictMethod(2),
+  some:     createDictMethod(3),
+  every:    createDictMethod(4),
+  find:     createDictMethod(5),
+  findKey:  findKey,
+  mapPairs: createDictMethod(7),
+  reduce:   reduce,
+  keyOf:    keyOf,
+  includes: includes,
+  has:      has,
+  get:      get,
+  set:      set,
+  isDict:   isDict
+});

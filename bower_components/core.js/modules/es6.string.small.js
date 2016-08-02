@@ -1,1 +1,7 @@
-"use strict";require("./_string-html")("small",function(t){return function(){return t(this,"small","","")}});
+'use strict';
+// B.2.3.11 String.prototype.small()
+require('./_string-html')('small', function(createHTML){
+  return function small(){
+    return createHTML(this, 'small', '', '');
+  }
+});

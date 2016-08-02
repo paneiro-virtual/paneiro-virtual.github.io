@@ -1,1 +1,17 @@
-var $export=require("./_export"),$imul=Math.imul;$export($export.S+$export.F*require("./_fails")(function(){return $imul(4294967295,5)!=-5||2!=$imul.length}),"Math",{imul:function(r,e){var t=65535,u=+r,i=+e,l=t&u,n=t&i;return 0|l*n+((t&u>>>16)*n+l*(t&i>>>16)<<16>>>0)}});
+// 20.2.2.18 Math.imul(x, y)
+var $export = require('./_export')
+  , $imul   = Math.imul;
+
+// some WebKit versions fails with big numbers, some has wrong arity
+$export($export.S + $export.F * require('./_fails')(function(){
+  return $imul(0xffffffff, 5) != -5 || $imul.length != 2;
+}), 'Math', {
+  imul: function imul(x, y){
+    var UINT16 = 0xffff
+      , xn = +x
+      , yn = +y
+      , xl = UINT16 & xn
+      , yl = UINT16 & yn;
+    return 0 | xl * yl + ((UINT16 & xn >>> 16) * yl + xl * (UINT16 & yn >>> 16) << 16 >>> 0);
+  }
+});

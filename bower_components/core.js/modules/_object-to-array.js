@@ -1,1 +1,16 @@
-var getKeys=require("./_object-keys"),toIObject=require("./_to-iobject"),isEnum=require("./_object-pie").f;module.exports=function(e){return function(t){for(var r,o=toIObject(t),u=getKeys(o),i=u.length,n=0,c=[];i>n;)isEnum.call(o,r=u[n++])&&c.push(e?[r,o[r]]:o[r]);return c}};
+var getKeys   = require('./_object-keys')
+  , toIObject = require('./_to-iobject')
+  , isEnum    = require('./_object-pie').f;
+module.exports = function(isEntries){
+  return function(it){
+    var O      = toIObject(it)
+      , keys   = getKeys(O)
+      , length = keys.length
+      , i      = 0
+      , result = []
+      , key;
+    while(length > i)if(isEnum.call(O, key = keys[i++])){
+      result.push(isEntries ? [key, O[key]] : O[key]);
+    } return result;
+  };
+};

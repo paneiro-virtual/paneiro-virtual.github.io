@@ -1,1 +1,5 @@
-require("./_typed-array")("Uint8",1,function(r){return function(n,t,e){return r(this,n,t,e)}},!0);
+require('./_typed-array')('Uint8', 1, function(init){
+  return function Uint8ClampedArray(data, byteOffset, length){
+    return init(this, data, byteOffset, length);
+  };
+}, true);

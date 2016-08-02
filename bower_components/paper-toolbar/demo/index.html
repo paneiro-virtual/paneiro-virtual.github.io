@@ -1,6 +1,17 @@
-<!DOCTYPE html><html><head>
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
   <title>paper-toolbar demo</title>
 
@@ -16,10 +27,22 @@
 
   <link rel="import" href="../paper-toolbar.html">
 
-  <style is="custom-style" include="demo-pages-shared-styles">.centered{min-width:calc(100% - 200px);}paper-toolbar paper-progress{--paper-progress-active-color:var(--accent-color);}.spacer{@apply (--layout-flex);}</style>
+  <style is="custom-style" include="demo-pages-shared-styles">
+    .centered {
+      min-width: calc(100% - 200px);
+    }
+
+    paper-toolbar paper-progress {
+      --paper-progress-active-color: var(--accent-color);
+    }
+
+    .spacer {
+      @apply(--layout-flex);
+    }
+  </style>
 
 </head>
-<body unresolved="">
+<body unresolved>
 
   <div class="vertical-section-container centered">
 
@@ -38,7 +61,15 @@
     <h3>A styled <code>paper-toolbar</code>.</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">paper-toolbar.red{--paper-toolbar-background:red;--paper-toolbar-title:{font-style:italic;font-weight:bold;};}</style>
+        <style is="custom-style">
+          paper-toolbar.red {
+            --paper-toolbar-background: red;
+            --paper-toolbar-title: {
+              font-style: italic;
+              font-weight: bold;
+            };
+          }
+        </style>
 
         <paper-toolbar class="red">
           <span class="title">Title</span>
@@ -151,6 +182,5 @@
 
   </div>
 
-
-
-</body></html>
+</body>
+</html>

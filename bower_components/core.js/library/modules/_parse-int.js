@@ -1,1 +1,9 @@
-var $parseInt=require("./_global").parseInt,$trim=require("./_string-trim").trim,ws=require("./_string-ws"),hex=/^[\-+]?0[xX]/;module.exports=8!==$parseInt(ws+"08")||22!==$parseInt(ws+"0x16")?function(r,e){var t=$trim(String(r),3);return $parseInt(t,e>>>0||(hex.test(t)?16:10))}:$parseInt;
+var $parseInt = require('./_global').parseInt
+  , $trim     = require('./_string-trim').trim
+  , ws        = require('./_string-ws')
+  , hex       = /^[\-+]?0[xX]/;
+
+module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix){
+  var string = $trim(String(str), 3);
+  return $parseInt(string, (radix >>> 0) || (hex.test(string) ? 16 : 10));
+} : $parseInt;

@@ -1,1 +1,2 @@
-require("../modules/es7.array.includes"),module.exports=require("../modules/_core").Array;
+require('../modules/es7.array.includes');
+module.exports = require('../modules/_core').Array;

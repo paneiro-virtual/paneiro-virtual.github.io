@@ -1,1 +1,13 @@
-module.exports=function(i){i.config("uglify",{dist:{files:{"dist/jambo.min.js":["dist/jambo.js"]}}}),i.loadNpmTasks("grunt-contrib-uglify")};
+module.exports = function(grunt) {
+
+    grunt.config('uglify', {
+        dist: {
+            files: {
+                'dist/jambo.min.js': ['dist/jambo.js']
+            }
+        }
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+
+};

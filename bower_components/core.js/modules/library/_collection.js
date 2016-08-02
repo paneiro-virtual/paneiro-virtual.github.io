@@ -1,1 +1,59 @@
-"use strict";var global=require("./_global"),$export=require("./_export"),meta=require("./_meta"),fails=require("./_fails"),hide=require("./_hide"),redefineAll=require("./_redefine-all"),forOf=require("./_for-of"),anInstance=require("./_an-instance"),isObject=require("./_is-object"),setToStringTag=require("./_set-to-string-tag"),dP=require("./_object-dp").f,each=require("./_array-methods")(0),DESCRIPTORS=require("./_descriptors");module.exports=function(e,r,t,i,o,n){var a=global[e],s=a,c=o?"set":"add",u=s&&s.prototype,f={};return DESCRIPTORS&&"function"==typeof s&&(n||u.forEach&&!fails(function(){(new s).entries().next()}))?(s=r(function(r,t){anInstance(r,s,e,"_c"),r._c=new a,void 0!=t&&forOf(t,o,r[c],r)}),each("add,clear,delete,forEach,get,has,set,keys,values,entries,toJSON".split(","),function(e){var r="add"==e||"set"==e;e in u&&(!n||"clear"!=e)&&hide(s.prototype,e,function(t,i){if(anInstance(this,s,e),!r&&n&&!isObject(t))return"get"==e&&void 0;var o=this._c[e](0===t?0:t,i);return r?this:o})}),"size"in u&&dP(s.prototype,"size",{get:function(){return this._c.size}})):(s=i.getConstructor(r,e,o,c),redefineAll(s.prototype,t),meta.NEED=!0),setToStringTag(s,e),f[e]=s,$export($export.G+$export.W+$export.F,f),n||i.setStrong(s,e,o),s};
+'use strict';
+var global         = require('./_global')
+  , $export        = require('./_export')
+  , meta           = require('./_meta')
+  , fails          = require('./_fails')
+  , hide           = require('./_hide')
+  , redefineAll    = require('./_redefine-all')
+  , forOf          = require('./_for-of')
+  , anInstance     = require('./_an-instance')
+  , isObject       = require('./_is-object')
+  , setToStringTag = require('./_set-to-string-tag')
+  , dP             = require('./_object-dp').f
+  , each           = require('./_array-methods')(0)
+  , DESCRIPTORS    = require('./_descriptors');
+
+module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
+  var Base  = global[NAME]
+    , C     = Base
+    , ADDER = IS_MAP ? 'set' : 'add'
+    , proto = C && C.prototype
+    , O     = {};
+  if(!DESCRIPTORS || typeof C != 'function' || !(IS_WEAK || proto.forEach && !fails(function(){
+    new C().entries().next();
+  }))){
+    // create collection constructor
+    C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
+    redefineAll(C.prototype, methods);
+    meta.NEED = true;
+  } else {
+    C = wrapper(function(target, iterable){
+      anInstance(target, C, NAME, '_c');
+      target._c = new Base;
+      if(iterable != undefined)forOf(iterable, IS_MAP, target[ADDER], target);
+    });
+    each('add,clear,delete,forEach,get,has,set,keys,values,entries,toJSON'.split(','),function(KEY){
+      var IS_ADDER = KEY == 'add' || KEY == 'set';
+      if(KEY in proto && !(IS_WEAK && KEY == 'clear'))hide(C.prototype, KEY, function(a, b){
+        anInstance(this, C, KEY);
+        if(!IS_ADDER && IS_WEAK && !isObject(a))return KEY == 'get' ? undefined : false;
+        var result = this._c[KEY](a === 0 ? 0 : a, b);
+        return IS_ADDER ? this : result;
+      });
+    });
+    if('size' in proto)dP(C.prototype, 'size', {
+      get: function(){
+        return this._c.size;
+      }
+    });
+  }
+
+  setToStringTag(C, NAME);
+
+  O[NAME] = C;
+  $export($export.G + $export.W + $export.F, O);
+
+  if(!IS_WEAK)common.setStrong(C, NAME, IS_MAP);
+
+  return C;
+};

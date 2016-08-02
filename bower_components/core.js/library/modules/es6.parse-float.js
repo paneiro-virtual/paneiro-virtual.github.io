@@ -1,1 +1,4 @@
-var $export=require("./_export"),$parseFloat=require("./_parse-float");$export($export.G+$export.F*(parseFloat!=$parseFloat),{parseFloat:$parseFloat});
+var $export     = require('./_export')
+  , $parseFloat = require('./_parse-float');
+// 18.2.4 parseFloat(string)
+$export($export.G + $export.F * (parseFloat != $parseFloat), {parseFloat: $parseFloat});

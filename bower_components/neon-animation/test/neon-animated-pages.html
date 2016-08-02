@@ -1,10 +1,21 @@
-<!DOCTYPE html><html><head>
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
 
   <title>neon-animated-pages tests</title>
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
@@ -40,15 +51,51 @@
 
   <test-fixture id="animate-initial-selection">
     <template>
-      <neon-animated-pages entry-animation="slide-from-left-animation" exit-animation="slide-right-animation" animate-initial-selection="">
+      <neon-animated-pages entry-animation="slide-from-left-animation" exit-animation="slide-right-animation" animate-initial-selection>
         <neon-animatable></neon-animatable>
         <neon-animatable></neon-animatable>
       </neon-animated-pages>
     </template>
   </test-fixture>
 
-  <script>suite("basic",function(){}),suite("notify-resize",function(){test("only a destination page recieves a resize event",function(e){var i=fixture("notify-resize"),t=Polymer.dom(i).children,n={};t.forEach(function(e){e.addEventListener("iron-resize",function(e){var i=e.currentTarget.tagName;n[i]=i in n?n[i]+1:1})}),i.selected=2,setTimeout(function(){assert.deepEqual(n,{"C-RESIZABLE-PAGE":1}),e()},50)})}),suite("animate-initial-selection",function(){test("'neon-animation-finish' event fired after animating initial selection",function(e){var i=fixture("animate-initial-selection");assert.isUndefined(i.selected);var t=Polymer.dom(i).children;i.addEventListener("neon-animation-finish",function(n){assert.strictEqual(i.selected,0),assert.isFalse(n.detail.fromPage),assert.deepEqual(n.detail.toPage,t[0]),e()}),i.selected=0})});</script>
+  <script>
+    suite('basic', function() {
+    });
+    suite('notify-resize', function() {
+      test('only a destination page recieves a resize event', function(done) {
+        var animatedPages = fixture('notify-resize');
+        var resizables = Polymer.dom(animatedPages).children;
+        var recieves = {};
+        resizables.forEach(function(page) {
+          page.addEventListener('iron-resize', function(event) {
+            var pageName = event.currentTarget.tagName;
+            recieves[pageName] = pageName in recieves ? recieves[pageName] + 1 : 1;
+          });
+        });
+        animatedPages.selected = 2;
+        setTimeout(function() {
+          assert.deepEqual(recieves, {
+            'C-RESIZABLE-PAGE': 1
+          });
+          done();
+        }, 50);
+      });
+    });
+    suite('animate-initial-selection', function() {
+      test('\'neon-animation-finish\' event fired after animating initial selection', function(done) {
+        var animatedPages = fixture('animate-initial-selection');
+        assert.isUndefined(animatedPages.selected);
+        var pages = Polymer.dom(animatedPages).children;
+        animatedPages.addEventListener('neon-animation-finish', function(event) {
+          assert.strictEqual(animatedPages.selected, 0);
+          assert.isFalse(event.detail.fromPage);
+          assert.deepEqual(event.detail.toPage, pages[0]);
+          done();
+        });
+        animatedPages.selected = 0;
+      });
+    });
+  </script>
 
-
-
-</body></html>
+</body>
+</html>

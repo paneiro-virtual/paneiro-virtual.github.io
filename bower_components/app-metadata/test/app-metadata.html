@@ -1,7 +1,10 @@
-<!DOCTYPE html><html><head>
+<!doctype html>
+
+<html>
+  <head>
     <title>app-metadata test</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
@@ -15,7 +18,45 @@
       </template>
     </test-fixture>
 
-    <script>suite("app-metadata",function(){var t;setup(function(){t=fixture("basic")}),test("sets meta when there is an app-metadata event",function(){var e=new CustomEvent("app-metadata",{bubbles:!0,detail:{title:"Title from event",description:"Description from event"}});sinon.spy(t,"_dataChanged"),document.body.dispatchEvent(e),expect(t._dataChanged.callCount).to.be.equal(1),assert.equal(document.title,"Title from event");var a=document.querySelector('meta[name="description"]');assert.equal(a.content,"Description from event")}),test("setting meta data",function(){t.data={title:"Title from data",description:"Description from data"},assert.equal(document.title,"Title from data");var e=document.querySelector('meta[name="description"]');assert.equal(e.content,"Description from data")})});</script>
-  
+    <script>
+      suite('app-metadata', function() {
+        var meta;
 
-</body></html>
+        setup(function() {
+          meta = fixture('basic');
+        });
+
+        test('sets meta when there is an app-metadata event', function() {
+          var event = new CustomEvent('app-metadata', {
+            bubbles: true,
+            detail: {
+              title: 'Title from event',
+              description: 'Description from event'
+            }
+          });
+
+          sinon.spy(meta, '_dataChanged');
+
+          document.body.dispatchEvent(event);
+
+          expect(meta._dataChanged.callCount).to.be.equal(1);
+
+          assert.equal(document.title, 'Title from event');
+          var d = document.querySelector('meta[name="description"]');
+          assert.equal(d.content, 'Description from event');
+        });
+
+        test('setting meta data', function() {
+          meta.data = {
+            title: 'Title from data',
+            description: 'Description from data'
+          };
+          assert.equal(document.title, 'Title from data');
+          var d = document.querySelector('meta[name="description"]');
+          assert.equal(d.content, 'Description from data');
+        });
+
+      });
+    </script>
+  </body>
+</html>

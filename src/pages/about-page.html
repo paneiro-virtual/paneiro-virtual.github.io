@@ -18,7 +18,73 @@
 
 </head><body><dom-module id="about-page">
   <template>
-    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}main{padding:48px 8px;}.page-title{@apply (--paper-font-display1);margin-bottom:20px;font-weight:300;text-align:center;}.divider{height:1px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}.divider-border{height:100%;width:100px;max-width:100%;background:var(--primary-color);}h2{@apply (--paper-font-title);white-space:initial;}p{@apply (--paper-font-body1);}hr{margin-top:20px;margin-bottom:20px;border:0;border-top:1px solid #eee;}a{color:var(--primary-color);text-decoration:none;}#social-icons{text-align:center;}#social-icons img{margin:10px 5px;width:40px;}</style>    
+    <style type="text/css">
+      :host {
+        display: block;
+        @apply(--paper-font-common-base);
+      }          
+
+      main {
+        padding: 48px 8px;
+      }
+
+      .page-title {
+        @apply(--paper-font-display1);
+        margin-bottom: 20px;
+        font-weight: 300;
+        text-align: center;
+      }     
+
+      .divider {
+        height: 1px;
+        width: 100%;                
+
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        justify-content: center;
+      } 
+
+      .divider-border {        
+        height: 100%;
+        width: 100px;
+        max-width: 100%;
+        background: var(--primary-color);        
+      }   
+
+      h2 {
+        @apply(--paper-font-title);
+        white-space: initial;
+      }
+
+      p {
+        @apply(--paper-font-body1);
+      }   
+
+      hr {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border: 0;
+        border-top: 1px solid #eee;
+      }   
+
+      a {
+        color: var(--primary-color);
+        text-decoration: none;
+      }   
+
+      #social-icons {
+        text-align: center;
+      }
+
+      #social-icons img {
+        margin: 10px 5px;
+        width: 40px;
+      }
+    </style>    
 
     <page-header></page-header>
 
@@ -103,6 +169,5 @@
     <page-footer></page-footer>
   </template>
 
-  <script>!function(o,i,n,a,e){Polymer({is:"about-page"})}(window,document,void 0,paneiro,jambo);</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="about-page.js"></script></body></html>

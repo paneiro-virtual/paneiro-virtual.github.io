@@ -1,1 +1,30 @@
-jambo.addClass=function(a,e){for(var s="object"==typeof a&&a.length?a:[a],l=0,t=s.length;l<t;++l){var o=s[l].className+"";if(""===o)s[l].className=e;else{o=o.split(" ");for(var c=0,f=o.length;c<f&&o[c]!==e;++c);c===f&&(s[l].className+=" "+e)}}};
+/**
+ * Adds a class to a DOM node.
+ *
+ * @param {Object} node The node instance, or an array of nodes.
+ * @param {String} className The class name to add.
+ * @return {Void}
+ */
+jambo.addClass = function(node, className) {
+    var elements = (typeof node === 'object' && node.length) ? node : [node];
+
+    for (var i = 0, len = elements.length; i < len; ++i) {
+        var c = elements[i].className + '';
+
+        if (c === '') {
+            elements[i].className = className;
+        } else {
+            c = c.split(' ');
+
+            for (var j = 0, len2 = c.length; j < len2; ++j) {
+                if (c[j] === className) {
+                    break;
+                }
+            }
+
+            if (j === len2) {
+                elements[i].className += ' ' + className;
+            }
+        }
+    }
+};

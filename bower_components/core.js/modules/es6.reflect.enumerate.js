@@ -1,1 +1,26 @@
-"use strict";var $export=require("./_export"),anObject=require("./_an-object"),Enumerate=function(e){this._t=anObject(e),this._i=0;var t,r=this._k=[];for(t in e)r.push(t)};require("./_iter-create")(Enumerate,"Object",function(){var e,t=this,r=t._k;do if(t._i>=r.length)return{value:void 0,done:!0};while(!((e=r[t._i++])in t._t));return{value:e,done:!1}}),$export($export.S,"Reflect",{enumerate:function(e){return new Enumerate(e)}});
+'use strict';
+// 26.1.5 Reflect.enumerate(target)
+var $export  = require('./_export')
+  , anObject = require('./_an-object');
+var Enumerate = function(iterated){
+  this._t = anObject(iterated); // target
+  this._i = 0;                  // next index
+  var keys = this._k = []       // keys
+    , key;
+  for(key in iterated)keys.push(key);
+};
+require('./_iter-create')(Enumerate, 'Object', function(){
+  var that = this
+    , keys = that._k
+    , key;
+  do {
+    if(that._i >= keys.length)return {value: undefined, done: true};
+  } while(!((key = keys[that._i++]) in that._t));
+  return {value: key, done: false};
+});
+
+$export($export.S, 'Reflect', {
+  enumerate: function enumerate(target){
+    return new Enumerate(target);
+  }
+});

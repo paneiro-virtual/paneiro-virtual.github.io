@@ -1,1 +1,29 @@
-jambo.setCookie=function(e,i,o){o=o||{};var t="";if(void 0!==o.expires&&o.expires!==1/0&&"number"==typeof o.expires){var a=new Date;a.setTime(a.getTime()+60*o.expires*1e3),t="; expires="+a.toString()}document.cookie=e+"="+i+t+(void 0!==o.domain?"; domain="+o.domain:"")+(void 0!==o.path?"; path="+o.path:"")};
+/**
+ * Sets a cookie value.
+ *
+ * @method setCookie
+ * @param {String} cname The name of the cookie
+ * @param {String} cvalue The value to set
+ * @param {Object} options A key value pair set with method settings.
+ * @param {String} options.domain The domain to set.
+ * @param {String} options.path The path to set.
+ * @return {Void}
+ */
+jambo.setCookie = function(cname, cvalue, options) {
+  options = options || {};
+
+  var expires = '';
+  if (
+    options.expires !== undefined &&
+    options.expires !== Infinity &&
+    typeof (options.expires) === 'number'
+  ) {
+    var expiresDate = new Date();
+    expiresDate.setTime(expiresDate.getTime() + (options.expires * 60 * 1000));
+    expires = '; expires=' + expiresDate.toString();
+  }
+
+  document.cookie = cname + '=' + cvalue + expires +
+    (options.domain !== undefined ? '; domain=' + options.domain : '') +
+    (options.path !== undefined ? '; path=' + options.path : '');
+};

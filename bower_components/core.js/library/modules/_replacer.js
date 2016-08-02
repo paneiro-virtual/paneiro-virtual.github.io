@@ -1,1 +1,8 @@
-module.exports=function(n,r){var t=r===Object(r)?function(n){return r[n]}:r;return function(r){return String(r).replace(n,t)}};
+module.exports = function(regExp, replace){
+  var replacer = replace === Object(replace) ? function(part){
+    return replace[part];
+  } : replace;
+  return function(it){
+    return String(it).replace(regExp, replacer);
+  };
+};

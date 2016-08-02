@@ -1,1 +1,18 @@
-"use strict";var $export=require("./_export"),$fails=require("./_fails"),aNumberValue=require("./_a-number-value"),$toPrecision=1..toPrecision;$export($export.P+$export.F*($fails(function(){return"1"!==$toPrecision.call(1,void 0)})||!$fails(function(){$toPrecision.call({})})),"Number",{toPrecision:function(i){var r=aNumberValue(this,"Number#toPrecision: incorrect invocation!");return void 0===i?$toPrecision.call(r):$toPrecision.call(r,i)}});
+'use strict';
+var $export      = require('./_export')
+  , $fails       = require('./_fails')
+  , aNumberValue = require('./_a-number-value')
+  , $toPrecision = 1..toPrecision;
+
+$export($export.P + $export.F * ($fails(function(){
+  // IE7-
+  return $toPrecision.call(1, undefined) !== '1';
+}) || !$fails(function(){
+  // V8 ~ Android 4.3-
+  $toPrecision.call({});
+})), 'Number', {
+  toPrecision: function toPrecision(precision){
+    var that = aNumberValue(this, 'Number#toPrecision: incorrect invocation!');
+    return precision === undefined ? $toPrecision.call(that) : $toPrecision.call(that, precision); 
+  }
+});

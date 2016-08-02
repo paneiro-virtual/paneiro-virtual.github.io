@@ -1,1 +1,28 @@
-"use strict";var $export=require("./_export"),html=require("./_html"),cof=require("./_cof"),toIndex=require("./_to-index"),toLength=require("./_to-length"),arraySlice=[].slice;$export($export.P+$export.F*require("./_fails")(function(){html&&arraySlice.call(html)}),"Array",{slice:function(r,t){var e=toLength(this.length),i=cof(this);if(t=void 0===t?e:t,"Array"==i)return arraySlice.call(this,r,t);for(var o=toIndex(r,e),a=toIndex(t,e),l=toLength(a-o),n=Array(l),h=0;h<l;h++)n[h]="String"==i?this.charAt(o+h):this[o+h];return n}});
+'use strict';
+var $export    = require('./_export')
+  , html       = require('./_html')
+  , cof        = require('./_cof')
+  , toIndex    = require('./_to-index')
+  , toLength   = require('./_to-length')
+  , arraySlice = [].slice;
+
+// fallback for not array-like ES3 strings and DOM objects
+$export($export.P + $export.F * require('./_fails')(function(){
+  if(html)arraySlice.call(html);
+}), 'Array', {
+  slice: function slice(begin, end){
+    var len   = toLength(this.length)
+      , klass = cof(this);
+    end = end === undefined ? len : end;
+    if(klass == 'Array')return arraySlice.call(this, begin, end);
+    var start  = toIndex(begin, len)
+      , upTo   = toIndex(end, len)
+      , size   = toLength(upTo - start)
+      , cloned = Array(size)
+      , i      = 0;
+    for(; i < size; i++)cloned[i] = klass == 'String'
+      ? this.charAt(start + i)
+      : this[start + i];
+    return cloned;
+  }
+});

@@ -1,1 +1,2 @@
-require("../../../modules/core.number.iterator"),module.exports=require("../../../modules/_iterators").Array;
+require('../../../modules/core.number.iterator');
+module.exports = require('../../../modules/_iterators').Array;

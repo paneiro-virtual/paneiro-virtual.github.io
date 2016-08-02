@@ -1,1 +1,858 @@
-!function e(t,n,r){function o(a,s){if(!n[a]){if(!t[a]){var c="function"==typeof require&&require;if(!s&&c)return c(a,!0);if(i)return i(a,!0);var u=new Error("Cannot find module '"+a+"'");throw u.code="MODULE_NOT_FOUND",u}var f=n[a]={exports:{}};t[a][0].call(f.exports,function(e){var n=t[a][1][e];return o(n?n:e)},f,f.exports,e,t,n,r)}return n[a].exports}for(var i="function"==typeof require&&require,a=0;a<r.length;a++)o(r[a]);return o}({1:[function(e,t,n){"use strict";function r(){}function o(e){try{return e.then}catch(e){return y=e,m}}function i(e,t){try{return e(t)}catch(e){return y=e,m}}function a(e,t,n){try{e(t,n)}catch(e){return y=e,m}}function s(e){if("object"!=typeof this)throw new TypeError("Promises must be constructed via new");if("function"!=typeof e)throw new TypeError("not a function");this._37=0,this._12=null,this._59=[],e!==r&&d(e,this)}function c(e,t,n){return new e.constructor(function(o,i){var a=new s(r);a.then(o,i),u(e,new h(t,n,a))})}function u(e,t){for(;3===e._37;)e=e._12;return 0===e._37?void e._59.push(t):void v(function(){var n=1===e._37?t.onFulfilled:t.onRejected;if(null===n)return void(1===e._37?f(t.promise,e._12):l(t.promise,e._12));var r=i(n,e._12);r===m?l(t.promise,y):f(t.promise,r)})}function f(e,t){if(t===e)return l(e,new TypeError("A promise cannot be resolved with itself."));if(t&&("object"==typeof t||"function"==typeof t)){var n=o(t);if(n===m)return l(e,y);if(n===e.then&&t instanceof s)return e._37=3,e._12=t,void p(e);if("function"==typeof n)return void d(n.bind(t),e)}e._37=1,e._12=t,p(e)}function l(e,t){e._37=2,e._12=t,p(e)}function p(e){for(var t=0;t<e._59.length;t++)u(e,e._59[t]);e._59=null}function h(e,t,n){this.onFulfilled="function"==typeof e?e:null,this.onRejected="function"==typeof t?t:null,this.promise=n}function d(e,t){var n=!1,r=a(e,function(e){n||(n=!0,f(t,e))},function(e){n||(n=!0,l(t,e))});n||r!==m||(n=!0,l(t,y))}var v=e("asap/raw"),y=null,m={};t.exports=s,s._99=r,s.prototype.then=function(e,t){if(this.constructor!==s)return c(this,e,t);var n=new s(r);return u(this,new h(e,t,n)),n}},{"asap/raw":4}],2:[function(e,t,n){"use strict";function r(e){var t=new o(o._99);return t._37=1,t._12=e,t}var o=e("./core.js");t.exports=o;var i=r(!0),a=r(!1),s=r(null),c=r(void 0),u=r(0),f=r("");o.resolve=function(e){if(e instanceof o)return e;if(null===e)return s;if(void 0===e)return c;if(e===!0)return i;if(e===!1)return a;if(0===e)return u;if(""===e)return f;if("object"==typeof e||"function"==typeof e)try{var t=e.then;if("function"==typeof t)return new o(t.bind(e))}catch(e){return new o(function(t,n){n(e)})}return r(e)},o.all=function(e){var t=Array.prototype.slice.call(e);return new o(function(e,n){function r(a,s){if(s&&("object"==typeof s||"function"==typeof s)){if(s instanceof o&&s.then===o.prototype.then){for(;3===s._37;)s=s._12;return 1===s._37?r(a,s._12):(2===s._37&&n(s._12),void s.then(function(e){r(a,e)},n))}var c=s.then;if("function"==typeof c){var u=new o(c.bind(s));return void u.then(function(e){r(a,e)},n)}}t[a]=s,0===--i&&e(t)}if(0===t.length)return e([]);for(var i=t.length,a=0;a<t.length;a++)r(a,t[a])})},o.reject=function(e){return new o(function(t,n){n(e)})},o.race=function(e){return new o(function(t,n){e.forEach(function(e){o.resolve(e).then(t,n)})})},o.prototype.catch=function(e){return this.then(null,e)}},{"./core.js":1}],3:[function(e,t,n){"use strict";function r(){if(c.length)throw c.shift()}function o(e){var t;t=s.length?s.pop():new i,t.task=e,a(t)}function i(){this.task=null}var a=e("./raw"),s=[],c=[],u=a.makeRequestCallFromTimer(r);t.exports=o,i.prototype.call=function(){try{this.task.call()}catch(e){o.onerror?o.onerror(e):(c.push(e),u())}finally{this.task=null,s[s.length]=this}}},{"./raw":4}],4:[function(e,t,n){(function(e){"use strict";function n(e){s.length||(a(),c=!0),s[s.length]=e}function r(){for(;u<s.length;){var e=u;if(u+=1,s[e].call(),u>f){for(var t=0,n=s.length-u;t<n;t++)s[t]=s[t+u];s.length-=u,u=0}}s.length=0,u=0,c=!1}function o(e){var t=1,n=new l(e),r=document.createTextNode("");return n.observe(r,{characterData:!0}),function(){t=-t,r.data=t}}function i(e){return function(){function t(){clearTimeout(n),clearInterval(r),e()}var n=setTimeout(t,0),r=setInterval(t,50)}}t.exports=n;var a,s=[],c=!1,u=0,f=1024,l=e.MutationObserver||e.WebKitMutationObserver;a="function"==typeof l?o(r):i(r),n.requestFlush=a,n.makeRequestCallFromTimer=i}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}],5:[function(e,t,n){"function"!=typeof Promise.prototype.done&&(Promise.prototype.done=function(e,t){var n=arguments.length?this.then.apply(this,arguments):this;n.then(null,function(e){setTimeout(function(){throw e},0)})})},{}],6:[function(e,t,n){e("asap");"undefined"==typeof Promise&&(Promise=e("./lib/core.js"),e("./lib/es6-extensions.js")),e("./polyfill-done.js")},{"./lib/core.js":1,"./lib/es6-extensions.js":2,"./polyfill-done.js":5,asap:3}]},{},[6]),"function"!=typeof Promise.prototype.done&&(Promise.prototype.done=function(e,t){var n=arguments.length?this.then.apply(this,arguments):this;n.then(null,function(e){setTimeout(function(){throw e},0)})}),function(e,t,n){var r={};r.ajax=function(e){var t="object"==typeof e.data?e.data:{},r=e.method===n||"GET"!==e.method.toUpperCase()&&"POST"!==e.method.toUpperCase()&&"PUT"!==e.method.toUpperCase()&&"DELETE"!==e.method.toUpperCase()?"GET":e.method.toUpperCase();if("string"==typeof e.url||""!==e.url){var o=[];for(var i in t)o.push(i+"="+encodeURIComponent(t[i]));var a=o.join("&"),s="GET"!==r||""===a?e.url:e.url+(e.url.indexOf("?")>=0?"&":"?")+a;return new Promise(function(t,n){var o=new XMLHttpRequest;o.onreadystatechange=function(){if(o.readyState==XMLHttpRequest.DONE){var r;try{r=JSON.parse(o.responseText)}catch(e){r=o.responseText}if(o.status>=200&&o.status<=299){"function"==typeof e.success?e.success:function(e){};t(r)}else{"function"==typeof e.error?e.error:function(e){};n(r)}}},o.open(r,s,!0),"GET"!==r?(o.setRequestHeader("Content-type","application/x-www-form-urlencoded"),o.send(a)):o.send()})}},r.getCookie=function(e){for(var n=e+"=",r=t.cookie.split(";"),o=0,i=r.length;o<i;++o){for(var a=r[o];" "===a.charAt(0);)a=a.substring(1);if(0===a.indexOf(n))return a.substring(n.length,a.length)}return""},r.setCookie=function(e,r,o){o=o||{};var i="";if(o.expires!==n&&o.expires!==1/0&&"number"==typeof o.expires){var a=new Date;a.setTime(a.getTime()+60*o.expires*1e3),i="; expires="+a.toString()}t.cookie=e+"="+r+i+(o.domain!==n?"; domain="+o.domain:"")+(o.path!==n?"; path="+o.path:"")},r.deleteCookie=function(e,r){r=r||{},t.cookie=e+"=;"+(r.domain!==n?"; domain="+r.domain:"")+(r.path!==n?"; path="+r.path:"")+"; expires=Thu, 01 Jan 1970 00:00:01 GMT;"},r.brMoneyFormat=function(e){var t=Math.floor(e/100),n=e%100,r=n>9?n+"":"0"+n;return"R$ "+t+","+r},r.deepExtend=function(e){e=e||{};for(var t=1;t<arguments.length;t++){var n=arguments[t];if(n)for(var o in n)n.hasOwnProperty(o)&&("object"==typeof n[o]?e[o]=r.deepExtend(e[o],n[o]):e[o]=n[o])}return e},r.base64Encode=function(e){var t,n,r,o,i,a,s,c,u="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",f=0,l=0,p="",h=[];if(!e)return e;e=unescape(encodeURIComponent(e));do t=e.charCodeAt(f++),n=e.charCodeAt(f++),r=e.charCodeAt(f++),c=t<<16|n<<8|r,o=c>>18&63,i=c>>12&63,a=c>>6&63,s=63&c,h[l++]=u.charAt(o)+u.charAt(i)+u.charAt(a)+u.charAt(s);while(f<e.length);p=h.join("");var d=e.length%3;return(d?p.slice(0,d-3):p)+"===".slice(d||3)},r.base64Decode=function(e){var t,n,r,o,i,a,s,c,u="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",f=0,l=0,p="",h=[];if(!e)return e;e+="";do o=u.indexOf(e.charAt(f++)),i=u.indexOf(e.charAt(f++)),a=u.indexOf(e.charAt(f++)),s=u.indexOf(e.charAt(f++)),c=o<<18|i<<12|a<<6|s,t=c>>16&255,n=c>>8&255,r=255&c,64==a?h[l++]=String.fromCharCode(t):64==s?h[l++]=String.fromCharCode(t,n):h[l++]=String.fromCharCode(t,n,r);while(f<e.length);return p=h.join(""),decodeURIComponent(escape(p.replace(/\0+$/,"")))},function(e,t,n,r){function o(e){var r=t.createElement("div");r.setAttribute("class","modal-background-layer"),r.style.display="none";var o=t.createElement("div");o.setAttribute("class","modal-wrapper"),r.appendChild(o),e.class!==n&&(o.className+=" "+e.class);var i=t.createElement("div");if(i.className="modal-title",i.innerHTML=e.title!==n?e.title:"",o.appendChild(i),e.contentDiv===n){var a=t.createElement("div");a.className="modal-message",a.innerHTML=e.msg,o.appendChild(a)}else{var s=t.querySelectorAll(e.contentDiv)[0];s.style.display="",o.appendChild(s)}var c=t.createElement("button");c.setAttribute("class","modal-close"),o.appendChild(c),t.body.appendChild(r),this.layer=r;var u=function(e){this.dismiss()}.bind(this);r.onclick=u,c.onclick=u,o.onclick=function(e){e.stopPropagation()}}var i=o.prototype;i.show=function(){t.body.style.overflow="hidden",this.layer.style.display=""},i.dismiss=function(){t.body.style.overflow="",this.layer.style.display="none"},i.destroy=function(){t.body.removeChild(this.layer),this.layer=null},r.Modal=o}(e,t,n,r),r.addClass=function(e,t){for(var n="object"==typeof e&&e.length?e:[e],r=0,o=n.length;r<o;++r){var i=n[r].className+"";if(""===i)n[r].className=t;else{i=i.split(" ");for(var a=0,s=i.length;a<s&&i[a]!==t;++a);a===s&&(n[r].className+=" "+t)}}},r.removeClass=function(e,t){for(var n="object"==typeof e&&e.length?e:[e],r=0,o=n.length;r<o;++r){var i=n[r].className+"";i=i.split(" ");for(var a="",s=0,c=i.length;s<c;++s)i[s]!==t&&(a+=i[s]+" ");n[r].className=a.trim()}},e.jambo=r}(window,document,void 0);
+(function e(t, n, r) {
+  function s(o, u) {
+    if (!n[o]) {
+      if (!t[o]) {
+        var a = typeof require == "function" && require;
+        if (!u && a) return a(o, !0);
+        if (i) return i(o, !0);
+        var f = new Error("Cannot find module '" + o + "'");
+        throw f.code = "MODULE_NOT_FOUND", f;
+      }
+      var l = n[o] = {
+        exports: {}
+      };
+      t[o][0].call(l.exports, function(e) {
+        var n = t[o][1][e];
+        return s(n ? n : e);
+      }, l, l.exports, e, t, n, r);
+    }
+    return n[o].exports;
+  }
+  var i = typeof require == "function" && require;
+  for (var o = 0; o < r.length; o++) s(r[o]);
+  return s;
+})({
+  1: [ function(require, module, exports) {
+    "use strict";
+    var asap = require("asap/raw");
+    function noop() {}
+    var LAST_ERROR = null;
+    var IS_ERROR = {};
+    function getThen(obj) {
+      try {
+        return obj.then;
+      } catch (ex) {
+        LAST_ERROR = ex;
+        return IS_ERROR;
+      }
+    }
+    function tryCallOne(fn, a) {
+      try {
+        return fn(a);
+      } catch (ex) {
+        LAST_ERROR = ex;
+        return IS_ERROR;
+      }
+    }
+    function tryCallTwo(fn, a, b) {
+      try {
+        fn(a, b);
+      } catch (ex) {
+        LAST_ERROR = ex;
+        return IS_ERROR;
+      }
+    }
+    module.exports = Promise;
+    function Promise(fn) {
+      if (typeof this !== "object") {
+        throw new TypeError("Promises must be constructed via new");
+      }
+      if (typeof fn !== "function") {
+        throw new TypeError("not a function");
+      }
+      this._37 = 0;
+      this._12 = null;
+      this._59 = [];
+      if (fn === noop) return;
+      doResolve(fn, this);
+    }
+    Promise._99 = noop;
+    Promise.prototype.then = function(onFulfilled, onRejected) {
+      if (this.constructor !== Promise) {
+        return safeThen(this, onFulfilled, onRejected);
+      }
+      var res = new Promise(noop);
+      handle(this, new Handler(onFulfilled, onRejected, res));
+      return res;
+    };
+    function safeThen(self, onFulfilled, onRejected) {
+      return new self.constructor(function(resolve, reject) {
+        var res = new Promise(noop);
+        res.then(resolve, reject);
+        handle(self, new Handler(onFulfilled, onRejected, res));
+      });
+    }
+    function handle(self, deferred) {
+      while (self._37 === 3) {
+        self = self._12;
+      }
+      if (self._37 === 0) {
+        self._59.push(deferred);
+        return;
+      }
+      asap(function() {
+        var cb = self._37 === 1 ? deferred.onFulfilled : deferred.onRejected;
+        if (cb === null) {
+          if (self._37 === 1) {
+            resolve(deferred.promise, self._12);
+          } else {
+            reject(deferred.promise, self._12);
+          }
+          return;
+        }
+        var ret = tryCallOne(cb, self._12);
+        if (ret === IS_ERROR) {
+          reject(deferred.promise, LAST_ERROR);
+        } else {
+          resolve(deferred.promise, ret);
+        }
+      });
+    }
+    function resolve(self, newValue) {
+      if (newValue === self) {
+        return reject(self, new TypeError("A promise cannot be resolved with itself."));
+      }
+      if (newValue && (typeof newValue === "object" || typeof newValue === "function")) {
+        var then = getThen(newValue);
+        if (then === IS_ERROR) {
+          return reject(self, LAST_ERROR);
+        }
+        if (then === self.then && newValue instanceof Promise) {
+          self._37 = 3;
+          self._12 = newValue;
+          finale(self);
+          return;
+        } else if (typeof then === "function") {
+          doResolve(then.bind(newValue), self);
+          return;
+        }
+      }
+      self._37 = 1;
+      self._12 = newValue;
+      finale(self);
+    }
+    function reject(self, newValue) {
+      self._37 = 2;
+      self._12 = newValue;
+      finale(self);
+    }
+    function finale(self) {
+      for (var i = 0; i < self._59.length; i++) {
+        handle(self, self._59[i]);
+      }
+      self._59 = null;
+    }
+    function Handler(onFulfilled, onRejected, promise) {
+      this.onFulfilled = typeof onFulfilled === "function" ? onFulfilled : null;
+      this.onRejected = typeof onRejected === "function" ? onRejected : null;
+      this.promise = promise;
+    }
+    function doResolve(fn, promise) {
+      var done = false;
+      var res = tryCallTwo(fn, function(value) {
+        if (done) return;
+        done = true;
+        resolve(promise, value);
+      }, function(reason) {
+        if (done) return;
+        done = true;
+        reject(promise, reason);
+      });
+      if (!done && res === IS_ERROR) {
+        done = true;
+        reject(promise, LAST_ERROR);
+      }
+    }
+  }, {
+    "asap/raw": 4
+  } ],
+  2: [ function(require, module, exports) {
+    "use strict";
+    var Promise = require("./core.js");
+    module.exports = Promise;
+    var TRUE = valuePromise(true);
+    var FALSE = valuePromise(false);
+    var NULL = valuePromise(null);
+    var UNDEFINED = valuePromise(undefined);
+    var ZERO = valuePromise(0);
+    var EMPTYSTRING = valuePromise("");
+    function valuePromise(value) {
+      var p = new Promise(Promise._99);
+      p._37 = 1;
+      p._12 = value;
+      return p;
+    }
+    Promise.resolve = function(value) {
+      if (value instanceof Promise) return value;
+      if (value === null) return NULL;
+      if (value === undefined) return UNDEFINED;
+      if (value === true) return TRUE;
+      if (value === false) return FALSE;
+      if (value === 0) return ZERO;
+      if (value === "") return EMPTYSTRING;
+      if (typeof value === "object" || typeof value === "function") {
+        try {
+          var then = value.then;
+          if (typeof then === "function") {
+            return new Promise(then.bind(value));
+          }
+        } catch (ex) {
+          return new Promise(function(resolve, reject) {
+            reject(ex);
+          });
+        }
+      }
+      return valuePromise(value);
+    };
+    Promise.all = function(arr) {
+      var args = Array.prototype.slice.call(arr);
+      return new Promise(function(resolve, reject) {
+        if (args.length === 0) return resolve([]);
+        var remaining = args.length;
+        function res(i, val) {
+          if (val && (typeof val === "object" || typeof val === "function")) {
+            if (val instanceof Promise && val.then === Promise.prototype.then) {
+              while (val._37 === 3) {
+                val = val._12;
+              }
+              if (val._37 === 1) return res(i, val._12);
+              if (val._37 === 2) reject(val._12);
+              val.then(function(val) {
+                res(i, val);
+              }, reject);
+              return;
+            } else {
+              var then = val.then;
+              if (typeof then === "function") {
+                var p = new Promise(then.bind(val));
+                p.then(function(val) {
+                  res(i, val);
+                }, reject);
+                return;
+              }
+            }
+          }
+          args[i] = val;
+          if (--remaining === 0) {
+            resolve(args);
+          }
+        }
+        for (var i = 0; i < args.length; i++) {
+          res(i, args[i]);
+        }
+      });
+    };
+    Promise.reject = function(value) {
+      return new Promise(function(resolve, reject) {
+        reject(value);
+      });
+    };
+    Promise.race = function(values) {
+      return new Promise(function(resolve, reject) {
+        values.forEach(function(value) {
+          Promise.resolve(value).then(resolve, reject);
+        });
+      });
+    };
+    Promise.prototype["catch"] = function(onRejected) {
+      return this.then(null, onRejected);
+    };
+  }, {
+    "./core.js": 1
+  } ],
+  3: [ function(require, module, exports) {
+    "use strict";
+    var rawAsap = require("./raw");
+    var freeTasks = [];
+    var pendingErrors = [];
+    var requestErrorThrow = rawAsap.makeRequestCallFromTimer(throwFirstError);
+    function throwFirstError() {
+      if (pendingErrors.length) {
+        throw pendingErrors.shift();
+      }
+    }
+    module.exports = asap;
+    function asap(task) {
+      var rawTask;
+      if (freeTasks.length) {
+        rawTask = freeTasks.pop();
+      } else {
+        rawTask = new RawTask();
+      }
+      rawTask.task = task;
+      rawAsap(rawTask);
+    }
+    function RawTask() {
+      this.task = null;
+    }
+    RawTask.prototype.call = function() {
+      try {
+        this.task.call();
+      } catch (error) {
+        if (asap.onerror) {
+          asap.onerror(error);
+        } else {
+          pendingErrors.push(error);
+          requestErrorThrow();
+        }
+      } finally {
+        this.task = null;
+        freeTasks[freeTasks.length] = this;
+      }
+    };
+  }, {
+    "./raw": 4
+  } ],
+  4: [ function(require, module, exports) {
+    (function(global) {
+      "use strict";
+      module.exports = rawAsap;
+      function rawAsap(task) {
+        if (!queue.length) {
+          requestFlush();
+          flushing = true;
+        }
+        queue[queue.length] = task;
+      }
+      var queue = [];
+      var flushing = false;
+      var requestFlush;
+      var index = 0;
+      var capacity = 1024;
+      function flush() {
+        while (index < queue.length) {
+          var currentIndex = index;
+          index = index + 1;
+          queue[currentIndex].call();
+          if (index > capacity) {
+            for (var scan = 0, newLength = queue.length - index; scan < newLength; scan++) {
+              queue[scan] = queue[scan + index];
+            }
+            queue.length -= index;
+            index = 0;
+          }
+        }
+        queue.length = 0;
+        index = 0;
+        flushing = false;
+      }
+      var BrowserMutationObserver = global.MutationObserver || global.WebKitMutationObserver;
+      if (typeof BrowserMutationObserver === "function") {
+        requestFlush = makeRequestCallFromMutationObserver(flush);
+      } else {
+        requestFlush = makeRequestCallFromTimer(flush);
+      }
+      rawAsap.requestFlush = requestFlush;
+      function makeRequestCallFromMutationObserver(callback) {
+        var toggle = 1;
+        var observer = new BrowserMutationObserver(callback);
+        var node = document.createTextNode("");
+        observer.observe(node, {
+          characterData: true
+        });
+        return function requestCall() {
+          toggle = -toggle;
+          node.data = toggle;
+        };
+      }
+      function makeRequestCallFromTimer(callback) {
+        return function requestCall() {
+          var timeoutHandle = setTimeout(handleTimer, 0);
+          var intervalHandle = setInterval(handleTimer, 50);
+          function handleTimer() {
+            clearTimeout(timeoutHandle);
+            clearInterval(intervalHandle);
+            callback();
+          }
+        };
+      }
+      rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
+    }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
+  }, {} ],
+  5: [ function(require, module, exports) {
+    if (typeof Promise.prototype.done !== "function") {
+      Promise.prototype.done = function(onFulfilled, onRejected) {
+        var self = arguments.length ? this.then.apply(this, arguments) : this;
+        self.then(null, function(err) {
+          setTimeout(function() {
+            throw err;
+          }, 0);
+        });
+      };
+    }
+  }, {} ],
+  6: [ function(require, module, exports) {
+    var asap = require("asap");
+    if (typeof Promise === "undefined") {
+      Promise = require("./lib/core.js");
+      require("./lib/es6-extensions.js");
+    }
+    require("./polyfill-done.js");
+  }, {
+    "./lib/core.js": 1,
+    "./lib/es6-extensions.js": 2,
+    "./polyfill-done.js": 5,
+    asap: 3
+  } ]
+}, {}, [ 6 ]);
+
+// should work in any browser without browserify
+if (typeof Promise.prototype.done !== 'function') {
+  Promise.prototype.done = function (onFulfilled, onRejected) {
+    var self = arguments.length ? this.then.apply(this, arguments) : this
+    self.then(null, function (err) {
+      setTimeout(function () {
+        throw err
+      }, 0)
+    })
+  }
+}
+
+(function (window, document, undefined) {
+
+    var jambo = {};
+
+/**
+ * Default ajax request.
+ *
+ * @method ajax
+ * @param {Object} options A set of key/value pairs that configure 
+ *          the Ajax request. 
+ * @param {Object} options.url A string containing the URL to 
+ *          which the request is sent. This parameter is obrigatory.
+ * @param {Object} [options.method=GET] The method of request. 
+ * @param {Object} options.data Data to be sent to the server. 
+ *          It is converted to a query string. 
+ * @return {Promise}
+ */
+jambo.ajax = function (options) {
+  var requestData = (typeof options.data === 'object') ? options.data : {};
+
+  var requestMethod = (
+    options.method === undefined ||
+    (
+      options.method.toUpperCase() !== 'GET' &&
+      options.method.toUpperCase() !== 'POST' &&
+      options.method.toUpperCase() !== 'PUT' &&
+      options.method.toUpperCase() !== 'DELETE'
+    )
+  ) ? 'GET' : options.method.toUpperCase();
+
+  if (typeof options.url !== 'string' && options.url === '') {
+    return;
+  }
+
+  // encode request data
+  var query = [];
+  for (var param in requestData) {
+    query.push(param + '=' + encodeURIComponent(requestData[param]));
+  }
+  var encodedData = query.join('&');
+  var url = (requestMethod !== 'GET' || encodedData === '') ?
+    options.url :
+    options.url + (options.url.indexOf('?') >= 0 ? '&' : '?') + encodedData;
+
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+        var responseData;
+
+        try {
+          responseData = JSON.parse(xhr.responseText);
+        } catch (e) {
+          responseData = xhr.responseText;
+        }
+
+        if (xhr.status >= 200 && xhr.status <= 299) {
+          var success = (typeof options.success === 'function') ?
+            options.success :
+            function (data) { };
+          
+          resolve(responseData);
+        } else {
+          var error = (typeof options.error === 'function') ?
+            options.error :
+            function (data) { };
+          
+          reject(responseData);
+        }        
+      }
+    };    
+
+    xhr.open(requestMethod, url, true);
+    if (requestMethod !== 'GET') {
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.send(encodedData);
+    } else {
+      xhr.send();
+    }
+  });
+};
+
+    /**
+     * Return the value stored on page cookies.
+     *
+     * @method getCookie
+     * @param {String} cname The name of the cookie to get.
+     * @return {String} The store value. If no value was found, an empty string
+     *         is returned.
+     */
+    jambo.getCookie = function(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0, len = ca.length; i < len; ++i) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+
+        return "";
+    };
+
+/**
+ * Sets a cookie value.
+ *
+ * @method setCookie
+ * @param {String} cname The name of the cookie
+ * @param {String} cvalue The value to set
+ * @param {Object} options A key value pair set with method settings.
+ * @param {String} options.domain The domain to set.
+ * @param {String} options.path The path to set.
+ * @return {Void}
+ */
+jambo.setCookie = function(cname, cvalue, options) {
+  options = options || {};
+
+  var expires = '';
+  if (
+    options.expires !== undefined &&
+    options.expires !== Infinity &&
+    typeof (options.expires) === 'number'
+  ) {
+    var expiresDate = new Date();
+    expiresDate.setTime(expiresDate.getTime() + (options.expires * 60 * 1000));
+    expires = '; expires=' + expiresDate.toString();
+  }
+
+  document.cookie = cname + '=' + cvalue + expires +
+    (options.domain !== undefined ? '; domain=' + options.domain : '') +
+    (options.path !== undefined ? '; path=' + options.path : '');
+};
+
+/**
+ * Deletes a page cookie.
+ *
+ * @method deleteCookie
+ * @param {String} cname The cookie name.
+ * @param {Object} options A key value pair set with method settings.
+ * @param {String} options.domain The domain to set.
+ * @param {String} options.path The path to set.
+ * @return {Void}
+ */
+jambo.deleteCookie = function (cname, options) {
+    options = options || {};
+
+    document.cookie = 
+        cname + '=;' +
+        (
+            options.domain !== undefined ? 
+                '; domain=' + options.domain : 
+                ''
+        ) +
+        (
+            options.path !== undefined ? 
+                '; path=' + options.path : 
+                ''
+        ) +
+        '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+};
+
+    /**
+     * Format a monetary value on Brazilian currency.
+     *
+     * @author Andrew C. Pacifico <andrewcpacifico@gmail.com>
+     * @method brMoneyFormat
+     * @param {Number} val A int value representing the value in cents.
+     * @return {String} The formated number.
+     */
+    jambo.brMoneyFormat = function (val) {
+        var intPart = Math.floor(val/100);
+        var decimal = val%100;
+
+        var cents = (decimal > 9) ? 
+            decimal + '' : 
+            '0' + decimal;
+
+        return 'R$ ' +  intPart + ',' + cents;
+    };
+
+jambo.deepExtend = function(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    var obj = arguments[i];
+
+    if (!obj)
+      continue;
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === 'object')
+          out[key] = jambo.deepExtend(out[key], obj[key]);
+        else
+          out[key] = obj[key];
+      }
+    }
+  }
+
+  return out;
+};
+
+    /**
+     * Encodes a string using base64 algorithm.
+     *
+     * @param {String} str The string to encode.
+     * @return {String} The base64 encoded string.
+     */
+    jambo.base64Encode = function(str) {
+        var b64 = 
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+        var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+            ac = 0,
+            enc = '',
+            tmp_arr = [];
+
+        if (!str) {
+            return str;
+        }
+
+        str = unescape(encodeURIComponent(str));
+
+        do {
+            // pack three octets into four hexets
+            o1 = str.charCodeAt(i++);
+            o2 = str.charCodeAt(i++);
+            o3 = str.charCodeAt(i++);
+
+            bits = o1 << 16 | o2 << 8 | o3;
+
+            h1 = bits >> 18 & 0x3f;
+            h2 = bits >> 12 & 0x3f;
+            h3 = bits >> 6 & 0x3f;
+            h4 = bits & 0x3f;
+
+            // use hexets to index into b64, and append result to encoded string
+            tmp_arr[ac++] = b64.charAt(h1) +
+                b64.charAt(h2) +
+                b64.charAt(h3) +
+                b64.charAt(h4);
+        } while (i < str.length);
+
+        enc = tmp_arr.join('');
+
+        var r = str.length % 3;
+
+        return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+    };
+
+
+    /**
+     * Decodes a base64 encoded string.
+     *
+     * @param {String} str The string to decode.
+     * @return {String} The decoded string.
+     */
+    jambo.base64Decode = function (str) {
+        var b64 = 
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+        var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+            ac = 0,
+            dec = '',
+            tmp_arr = [];
+
+        if (!str) {
+            return str;
+        }
+
+        str += '';
+
+        do {
+            // unpack four hexets into three octets using index points in b64
+            h1 = b64.indexOf(str.charAt(i++));
+            h2 = b64.indexOf(str.charAt(i++));
+            h3 = b64.indexOf(str.charAt(i++));
+            h4 = b64.indexOf(str.charAt(i++));
+
+            bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+
+            o1 = bits >> 16 & 0xff;
+            o2 = bits >> 8 & 0xff;
+            o3 = bits & 0xff;
+
+            if (h3 == 64) {
+                tmp_arr[ac++] = String.fromCharCode(o1);
+            } else if (h4 == 64) {
+                tmp_arr[ac++] = String.fromCharCode(o1, o2);
+            } else {
+                tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+            }
+        } while (i < str.length);
+
+        dec = tmp_arr.join('');
+
+        return decodeURIComponent(escape(dec.replace(/\0+$/, '')));
+    };
+
+(function(window, document, undefined, jambo) {
+    /**
+     * Modal window component.
+     *
+     * @class Modal
+     * @constructor
+     * @param {Object} options A set of key/value pairs with component settings.
+     * @param {String} [options.msg] The message to display on the modal.
+     * @param {String} [options.title] The window title.
+     * @param {String} [options.class] An optional css class to add 
+     *        to modal wrapper.
+     * @param {String} [options.contentDiv] A selector to a div to be added
+     *        to modal window.
+     */
+    function Modal(options) {
+        // create the background layer that blocks the page
+        var divLayer = document.createElement('div');
+        divLayer.setAttribute('class', 'modal-background-layer');
+        divLayer.style.display = 'none';
+
+        // create the modal window wrapper 
+        var divWrapper = document.createElement('div');
+        divWrapper.setAttribute('class', 'modal-wrapper');
+        divLayer.appendChild(divWrapper);
+
+        // add an optional class to modal wrapper
+        if (options.class !== undefined) {
+            divWrapper.className += ' ' + options.class;
+        }
+
+        // creates the container where the title is placed
+        var divTitle = document.createElement('div');
+        divTitle.className = 'modal-title';
+        divTitle.innerHTML = (options.title !== undefined ? options.title : '');
+        divWrapper.appendChild(divTitle);
+
+        if (options.contentDiv === undefined) {
+            // creates the container where the message is placed
+            var divContent = document.createElement('div');
+            divContent.className = 'modal-message';
+            divContent.innerHTML = options.msg;
+            divWrapper.appendChild(divContent);
+        } else {
+            var contentDiv = document.querySelectorAll(options.contentDiv)[0];
+            contentDiv.style.display = '';
+            divWrapper.appendChild(contentDiv);
+        }
+
+        var closeButton = document.createElement('button');
+        closeButton.setAttribute('class', 'modal-close');
+        divWrapper.appendChild(closeButton);
+
+        document.body.appendChild(divLayer);
+
+        this.layer = divLayer;
+        var close = function(e) {
+            this.dismiss();
+        }.bind(this);
+
+        divLayer.onclick = close;
+        closeButton.onclick = close;
+
+        divWrapper.onclick = function(e) {
+            e.stopPropagation();
+        };
+    }
+
+    var self = Modal.prototype;
+
+    self.show = function() {
+        document.body.style.overflow = 'hidden';
+        this.layer.style.display = '';
+    };
+
+    self.dismiss = function() {
+        document.body.style.overflow = '';
+        this.layer.style.display = 'none';
+    };
+
+    self.destroy = function() {
+        document.body.removeChild(this.layer);
+        this.layer = null;
+    };
+
+    jambo.Modal = Modal;
+
+})(window, document, undefined, jambo);
+
+/**
+ * Adds a class to a DOM node.
+ *
+ * @param {Object} node The node instance, or an array of nodes.
+ * @param {String} className The class name to add.
+ * @return {Void}
+ */
+jambo.addClass = function(node, className) {
+    var elements = (typeof node === 'object' && node.length) ? node : [node];
+
+    for (var i = 0, len = elements.length; i < len; ++i) {
+        var c = elements[i].className + '';
+
+        if (c === '') {
+            elements[i].className = className;
+        } else {
+            c = c.split(' ');
+
+            for (var j = 0, len2 = c.length; j < len2; ++j) {
+                if (c[j] === className) {
+                    break;
+                }
+            }
+
+            if (j === len2) {
+                elements[i].className += ' ' + className;
+            }
+        }
+    }
+};
+
+/**
+ * Remove class from a DOM node.
+ *
+ * @param {Object} node The node instance, or an array of nodes.
+ * @param {String} className The class name to remove.
+ * @return {Void}
+ */
+jambo.removeClass = function(node, className){
+    var elements = (typeof node === 'object' && node.length) ? node : [node];
+    
+    for (var i = 0, len = elements.length; i < len ; ++i) {
+        var c = elements[i].className + '';
+        c = c.split(' ');
+
+        var newClassName = '';
+        for (var j = 0, len2 = c.length; j < len2; ++j) {
+            if (c[j] !== className) {
+                newClassName += c[j] + ' ';
+            }
+        }
+
+        elements[i].className = newClassName.trim();
+    }
+};
+
+    window.jambo = jambo;
+
+})(window, document, undefined);

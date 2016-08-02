@@ -18,7 +18,51 @@
 
 </head><body><dom-module id="category-page">
   <template>
-    <style>:host{display:block;}.main-content{padding:48px 8px;}#loadMoreWrapper{text-align:center;}#loadMoreButton{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:16px;}paper-spinner-lite{height:50px;width:50px;display:block;margin:0 auto;--paper-spinner-color:var(--primary-color);--paper-spinner-stroke-width:4px;}paper-spinner-lite:not([active]){display:none;}.page-title{@apply (--paper-font-display1);margin:0 8px 16px 0;}@media screen and (max-width: 780px){.page-title{@apply (--paper-font-headline);}}</style>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .main-content {
+        padding: 48px 8px;
+      }
+
+      #loadMoreWrapper {
+        text-align: center;
+      }   
+
+      #loadMoreButton {
+        @apply(--paper-font-button);
+        background: var(--primary-color);
+        color: #fff;
+        margin: 16px;
+      }
+
+      paper-spinner-lite {
+        height: 50px;
+        width: 50px;
+        display: block;
+        margin: 0 auto;
+
+        --paper-spinner-color: var(--primary-color);
+        --paper-spinner-stroke-width: 4px;
+      } 
+
+      paper-spinner-lite:not([active]) {
+        display: none;
+      }
+
+      .page-title {
+        @apply(--paper-font-display1);
+        margin: 0 8px 16px 0;
+      }
+
+      @media screen and (max-width: 780px) {
+        .page-title {
+          @apply(--paper-font-headline);
+        }
+      }
+    </style>
     
     <app-route route="{{route}}" pattern="/:category" data="{{routeData}}">
     </app-route>    
@@ -40,152 +84,5 @@
     </main>    
   </template>
 
-  <script>
-    (function(window, document, undefined, paneiro, jambo) {
-      var categoryPathMap = {};
-      var categories = paneiro.config.categories;
-      for (var i = 0, len = categories.length; i < len; ++i) {
-        categoryPathMap[categories[i].path] = categories[i];
-      }      
-
-      Polymer({
-        is: 'category-page',
-
-        properties: {
-          cart: Object,          
-          categoryName: String,
-          firstLoad: {
-            type: Array,
-            notify: true
-          },
-          hasNext: {
-            type: Boolean,
-            value: false
-          },          
-          products: {
-            type: Array,
-            notify: true
-          },
-          page: Number,
-          route: Object,
-          selectedCategory: {
-            type: String,
-            notify: true
-          }          
-        },                       
-
-        observers: [
-          '_routeCategoryChanged(routeData.category)'
-        ],        
-
-        _routeCategoryChanged: function(category) {
-          if (this.firstLoad) {
-            this.products = [];            
-          } else {
-            paneiro.sharedElements.loadingProgress.classList.add('transiting');            
-            paneiro.sharedElements.loadingProgress.value = 85;
-          }
-
-          category = category || 'petshop'; 
-
-          var categoryData = categoryPathMap[category];          
-
-          this.hasNext = false;
-          this.selectedCategory = category;
-          this.page = 1;
-          this.categoryName = categoryData.name;
-          this._loadCategoryProducts(categoryData.id, this.page);                    
-        },        
-
-        _loadCategoryProducts: function(categoryId, page) {        
-          paneiro.api.product.get({
-            category: categoryId,
-            page: page
-          }).then(response => {            
-            if (page === 1) {
-              this.products = response.data;
-              this.products.forEach(product => {
-                product.qty = 1;
-              });
-              window.scrollTo(0, 0);
-            } else {              
-              response.data.forEach(product => {
-                product.qty = 1;
-                this.push('products', product);                
-              });
-            }
-
-            this.hasNext = (response.paging !== undefined && response.paging.next !== undefined);                        
-            
-            if (!this.firstLoad) {
-              paneiro.sharedElements.loadingProgress.value = 100;
-              paneiro.sharedElements.loadingProgress.classList.remove('transiting');
-
-              setTimeout(() => {
-                paneiro.sharedElements.loadingProgress.value = 0;                
-              }, 300);                
-            }
-            
-            this.firstLoad = false;                                                                  
-          });
-        },
-
-        onIncQtyTap: function(e) {          
-          if (e.model.product.qty < 9) {
-            e.model.set('product.qty', e.model.product.qty + 1);
-          }          
-        },
-
-        onDecQtyTap: function(e) {          
-          if (e.model.product.qty > 0) {
-            e.model.set('product.qty', e.model.product.qty - 1);
-          }          
-        },
-
-        onAddToCartTap: function(e) {
-          var product = e.model.product;
-
-          var qty = product.qty;
-          var price = product.price;
-          
-          paneiro.api.cart.addProduct({
-            id: product.id,
-            qty: product.qty
-          }).then(response => {            
-            this.$.addedToCartToast.open();
-
-            var idx = this.cart.items.findIndex((element, index, array) => {
-              return element.id === product.id;
-            });            
-
-            if (idx > -1) {
-              this.set('cart.items.' + idx + '.qty', this.cart.items[idx].qty + qty);              
-            } else {
-              var p = jambo.deepExtend({}, product);
-              p.qty = qty;
-
-              this.push('cart.items', p);
-            }
-
-            this.set('cart.total', this.cart.total + qty*product.price);
-          }).catch(err => console.log(err));
-
-          e.model.set('product.qty', 0);
-        },
-
-        onLoadMoreTap: function() {
-          this.page++;
-
-          var categoryData = categoryPathMap[this.selectedCategory];
-          this._loadCategoryProducts(categoryData.id, this.page);
-
-          if (!this.firstLoad) {            
-            paneiro.sharedElements.loadingProgress.classList.add('transiting');            
-            paneiro.sharedElements.loadingProgress.value = 85;
-          }
-        }
-      });
-    })(window, document, undefined, paneiro, jambo);    
-  </script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="category-page.js"></script></body></html>

@@ -1,1 +1,77 @@
-!function(){"undefined"!=typeof self&&self.Prism&&self.document&&Prism.hooks.add("complete",function(e){if(e.code){var t=e.element.parentNode,a=/\s*\bcommand-line\b\s*/;if(t&&/pre/i.test(t.nodeName)&&(a.test(t.className)||a.test(e.element.className))&&!e.element.querySelector(".command-line-prompt")){a.test(e.element.className)&&(e.element.className=e.element.className.replace(a,"")),a.test(t.className)||(t.className+=" command-line");var n=new Array(1+e.code.split("\n").length),s=t.getAttribute("data-prompt")||"";if(""!==s)n=n.join('<span data-prompt="'+s+'"></span>');else{var r=t.getAttribute("data-user")||"user",l=t.getAttribute("data-host")||"localhost";n=n.join('<span data-user="'+r+'" data-host="'+l+'"></span>')}var m=document.createElement("span");m.className="command-line-prompt",m.innerHTML=n;var o=t.getAttribute("data-output")||"";o=o.split(",");for(var i=0;i<o.length;i++){var d=o[i].split("-"),p=parseInt(d[0]),c=p;if(2===d.length&&(c=parseInt(d[1])),!isNaN(p)&&!isNaN(c))for(var u=p;u<=c&&u<=m.children.length;u++){var N=m.children[u-1];N.removeAttribute("data-user"),N.removeAttribute("data-host"),N.removeAttribute("data-prompt")}}e.element.innerHTML=m.outerHTML+e.element.innerHTML}}})}();
+(function() {
+
+if (typeof self === 'undefined' || !self.Prism || !self.document) {
+	return;
+}
+
+Prism.hooks.add('complete', function (env) {
+	if (!env.code) {
+		return;
+	}
+
+	// Works only for <code> wrapped inside <pre> (not inline).
+	var pre = env.element.parentNode;
+	var clsReg = /\s*\bcommand-line\b\s*/;
+	if (
+		!pre || !/pre/i.test(pre.nodeName) ||
+			// Abort only if neither the <pre> nor the <code> have the class
+		(!clsReg.test(pre.className) && !clsReg.test(env.element.className))
+	) {
+		return;
+	}
+
+	if (env.element.querySelector('.command-line-prompt')) {
+		// Abort if prompt already exists.
+		return;
+	}
+
+	if (clsReg.test(env.element.className)) {
+		// Remove the class "command-line" from the <code>
+		env.element.className = env.element.className.replace(clsReg, '');
+	}
+	if (!clsReg.test(pre.className)) {
+		// Add the class "command-line" to the <pre>
+		pre.className += ' command-line';
+	}
+
+	// Create the "rows" that will become the command-line prompts. -- cwells
+	var lines = new Array(1 + env.code.split('\n').length);
+	var promptText = pre.getAttribute('data-prompt') || '';
+	if (promptText !== '') {
+		lines = lines.join('<span data-prompt="' + promptText + '"></span>');
+	} else {
+		var user = pre.getAttribute('data-user') || 'user';
+		var host = pre.getAttribute('data-host') || 'localhost';
+		lines = lines.join('<span data-user="' + user + '" data-host="' + host + '"></span>');
+	}
+
+	// Create the wrapper element. -- cwells
+	var prompt = document.createElement('span');
+	prompt.className = 'command-line-prompt';
+	prompt.innerHTML = lines;
+
+	// Mark the output lines so they can be styled differently (no prompt). -- cwells
+	var outputSections = pre.getAttribute('data-output') || '';
+	outputSections = outputSections.split(',');
+	for (var i = 0; i < outputSections.length; i++) {
+		var outputRange = outputSections[i].split('-');
+		var outputStart = parseInt(outputRange[0]);
+		var outputEnd = outputStart; // Default: end at the first line when it's not an actual range. -- cwells
+		if (outputRange.length === 2) {
+			outputEnd = parseInt(outputRange[1]);
+		}
+
+		if (!isNaN(outputStart) && !isNaN(outputEnd)) {
+			for (var j = outputStart; j <= outputEnd && j <= prompt.children.length; j++) {
+				var node = prompt.children[j - 1];
+				node.removeAttribute('data-user');
+				node.removeAttribute('data-host');
+				node.removeAttribute('data-prompt');
+			}
+		}
+	}
+
+	env.element.innerHTML = prompt.outerHTML + env.element.innerHTML;
+});
+
+}());

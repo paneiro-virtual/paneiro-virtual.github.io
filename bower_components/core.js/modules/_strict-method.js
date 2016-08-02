@@ -1,1 +1,7 @@
-var fails=require("./_fails");module.exports=function(l,n){return!!l&&fails(function(){n?l.call(null,function(){},1):l.call(null)})};
+var fails = require('./_fails');
+
+module.exports = function(method, arg){
+  return !!method && fails(function(){
+    arg ? method.call(null, function(){}, 1) : method.call(null);
+  });
+};

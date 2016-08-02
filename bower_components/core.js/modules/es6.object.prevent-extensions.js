@@ -1,1 +1,9 @@
-var isObject=require("./_is-object"),meta=require("./_meta").onFreeze;require("./_object-sap")("preventExtensions",function(e){return function(r){return e&&isObject(r)?e(meta(r)):r}});
+// 19.1.2.15 Object.preventExtensions(O)
+var isObject = require('./_is-object')
+  , meta     = require('./_meta').onFreeze;
+
+require('./_object-sap')('preventExtensions', function($preventExtensions){
+  return function preventExtensions(it){
+    return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
+  };
+});

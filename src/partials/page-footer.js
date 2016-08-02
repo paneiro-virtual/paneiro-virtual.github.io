@@ -1,0 +1,6 @@
+'use strict';
+
+Polymer({
+      is: 'page-footer'
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhcnRpYWxzL3BhZ2UtZm9vdGVyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsUUFBUTtBQUNGLFVBQUk7QUFERixDQUFSIiwiZmlsZSI6InBhcnRpYWxzL3BhZ2UtZm9vdGVyLmpzIiwic291cmNlc0NvbnRlbnQiOlsiUG9seW1lcih7XG4gICAgICBpczogJ3BhZ2UtZm9vdGVyJyAgICAgIFxuICAgIH0pOyJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==

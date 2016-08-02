@@ -1,1 +1,56 @@
-"use strict";var each=require("./_array-methods")(0),redefine=require("./_redefine"),meta=require("./_meta"),assign=require("./_object-assign"),weak=require("./_collection-weak"),isObject=require("./_is-object"),getWeak=meta.getWeak,isExtensible=Object.isExtensible,uncaughtFrozenStore=weak.ufstore,tmp={},InternalMap,wrapper=function(e){return function(){return e(this,arguments.length>0?arguments[0]:void 0)}},methods={get:function(e){if(isObject(e)){var t=getWeak(e);return t===!0?uncaughtFrozenStore(this).get(e):t?t[this._i]:void 0}},set:function(e,t){return weak.def(this,e,t)}},$WeakMap=module.exports=require("./_collection")("WeakMap",wrapper,methods,weak,!0,!0);7!=(new $WeakMap).set((Object.freeze||Object)(tmp),7).get(tmp)&&(InternalMap=weak.getConstructor(wrapper),assign(InternalMap.prototype,methods),meta.NEED=!0,each(["delete","has","get","set"],function(e){var t=$WeakMap.prototype,r=t[e];redefine(t,e,function(t,a){if(isObject(t)&&!isExtensible(t)){this._f||(this._f=new InternalMap);var i=this._f[e](t,a);return"set"==e?this:i}return r.call(this,t,a)})}));
+'use strict';
+var each         = require('./_array-methods')(0)
+  , redefine     = require('./_redefine')
+  , meta         = require('./_meta')
+  , assign       = require('./_object-assign')
+  , weak         = require('./_collection-weak')
+  , isObject     = require('./_is-object')
+  , getWeak      = meta.getWeak
+  , isExtensible = Object.isExtensible
+  , uncaughtFrozenStore = weak.ufstore
+  , tmp          = {}
+  , InternalMap;
+
+var wrapper = function(get){
+  return function WeakMap(){
+    return get(this, arguments.length > 0 ? arguments[0] : undefined);
+  };
+};
+
+var methods = {
+  // 23.3.3.3 WeakMap.prototype.get(key)
+  get: function get(key){
+    if(isObject(key)){
+      var data = getWeak(key);
+      if(data === true)return uncaughtFrozenStore(this).get(key);
+      return data ? data[this._i] : undefined;
+    }
+  },
+  // 23.3.3.5 WeakMap.prototype.set(key, value)
+  set: function set(key, value){
+    return weak.def(this, key, value);
+  }
+};
+
+// 23.3 WeakMap Objects
+var $WeakMap = module.exports = require('./_collection')('WeakMap', wrapper, methods, weak, true, true);
+
+// IE11 WeakMap frozen keys fix
+if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
+  InternalMap = weak.getConstructor(wrapper);
+  assign(InternalMap.prototype, methods);
+  meta.NEED = true;
+  each(['delete', 'has', 'get', 'set'], function(key){
+    var proto  = $WeakMap.prototype
+      , method = proto[key];
+    redefine(proto, key, function(a, b){
+      // store frozen objects on internal weakmap shim
+      if(isObject(a) && !isExtensible(a)){
+        if(!this._f)this._f = new InternalMap;
+        var result = this._f[key](a, b);
+        return key == 'set' ? this : result;
+      // store all the rest on native weakmap
+      } return method.call(this, a, b);
+    });
+  });
+}

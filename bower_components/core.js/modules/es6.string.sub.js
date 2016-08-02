@@ -1,1 +1,7 @@
-"use strict";require("./_string-html")("sub",function(t){return function(){return t(this,"sub","","")}});
+'use strict';
+// B.2.3.13 String.prototype.sub()
+require('./_string-html')('sub', function(createHTML){
+  return function sub(){
+    return createHTML(this, 'sub', '', '');
+  }
+});

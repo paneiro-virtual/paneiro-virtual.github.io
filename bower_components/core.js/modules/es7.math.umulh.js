@@ -1,1 +1,16 @@
-var $export=require("./_export");$export($export.S,"Math",{umulh:function(r,e){var t=65535,o=+r,u=+e,p=o&t,x=u&t,a=o>>>16,n=u>>>16,$=(a*x>>>0)+(p*x>>>16);return a*n+($>>>16)+((p*n>>>0)+($&t)>>>16)}});
+// https://gist.github.com/BrendanEich/4294d5c212a6d2254703
+var $export = require('./_export');
+
+$export($export.S, 'Math', {
+  umulh: function umulh(u, v){
+    var UINT16 = 0xffff
+      , $u = +u
+      , $v = +v
+      , u0 = $u & UINT16
+      , v0 = $v & UINT16
+      , u1 = $u >>> 16
+      , v1 = $v >>> 16
+      , t  = (u1 * v0 >>> 0) + (u0 * v0 >>> 16);
+    return u1 * v1 + (t >>> 16) + ((u0 * v1 >>> 0) + (t & UINT16) >>> 16);
+  }
+});

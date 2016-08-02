@@ -1,1 +1,2 @@
-require("../../modules/es6.number.max-safe-integer"),module.exports=9007199254740991;
+require('../../modules/es6.number.max-safe-integer');
+module.exports = 0x1fffffffffffff;

@@ -1,1 +1,24 @@
-"use strict";var aFunction=require("./_a-function"),isObject=require("./_is-object"),invoke=require("./_invoke"),arraySlice=[].slice,factories={},construct=function(t,r,e){if(!(r in factories)){for(var i=[],n=0;n<r;n++)i[n]="a["+n+"]";factories[r]=Function("F,a","return new F("+i.join(",")+")")}return factories[r](t,e)};module.exports=Function.bind||function(t){var r=aFunction(this),e=arraySlice.call(arguments,1),i=function(){var n=e.concat(arraySlice.call(arguments));return this instanceof i?construct(r,n.length,n):invoke(r,n,t)};return isObject(r.prototype)&&(i.prototype=r.prototype),i};
+'use strict';
+var aFunction  = require('./_a-function')
+  , isObject   = require('./_is-object')
+  , invoke     = require('./_invoke')
+  , arraySlice = [].slice
+  , factories  = {};
+
+var construct = function(F, len, args){
+  if(!(len in factories)){
+    for(var n = [], i = 0; i < len; i++)n[i] = 'a[' + i + ']';
+    factories[len] = Function('F,a', 'return new F(' + n.join(',') + ')');
+  } return factories[len](F, args);
+};
+
+module.exports = Function.bind || function bind(that /*, args... */){
+  var fn       = aFunction(this)
+    , partArgs = arraySlice.call(arguments, 1);
+  var bound = function(/* args... */){
+    var args = partArgs.concat(arraySlice.call(arguments));
+    return this instanceof bound ? construct(fn, args.length, args) : invoke(fn, args, that);
+  };
+  if(isObject(fn.prototype))bound.prototype = fn.prototype;
+  return bound;
+};

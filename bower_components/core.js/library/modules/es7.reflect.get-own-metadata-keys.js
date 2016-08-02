@@ -1,1 +1,8 @@
-var metadata=require("./_metadata"),anObject=require("./_an-object"),ordinaryOwnMetadataKeys=metadata.keys,toMetaKey=metadata.key;metadata.exp({getOwnMetadataKeys:function(a){return ordinaryOwnMetadataKeys(anObject(a),arguments.length<2?void 0:toMetaKey(arguments[1]))}});
+var metadata                = require('./_metadata')
+  , anObject                = require('./_an-object')
+  , ordinaryOwnMetadataKeys = metadata.keys
+  , toMetaKey               = metadata.key;
+
+metadata.exp({getOwnMetadataKeys: function getOwnMetadataKeys(target /*, targetKey */){
+  return ordinaryOwnMetadataKeys(anObject(target), arguments.length < 2 ? undefined : toMetaKey(arguments[1]));
+}});

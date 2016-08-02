@@ -1,1 +1,5 @@
-require("../../modules/es6.regexp.match");var MATCH=require("../../modules/_wks")("match");module.exports=function(e,r){return RegExp.prototype[MATCH].call(e,r)};
+require('../../modules/es6.regexp.match');
+var MATCH = require('../../modules/_wks')('match');
+module.exports = function(it, str){
+  return RegExp.prototype[MATCH].call(it, str);
+};

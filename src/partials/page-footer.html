@@ -6,7 +6,33 @@
 
 </head><body><dom-module id="page-footer">
   <template>
-    <style type="text/css">:host{@apply (--paper-font-body2);background:#424242;color:#9e9e9e;display:block;padding:16px 40px;}a{color:inherit;text-decoration:none;}.bottom-section{@apply (--paper-font-body2);}.bottom-section-item{margin-right:16px;}.section-title{color:#fff;}</style>    
+    <style type="text/css">
+      :host {
+        @apply(--paper-font-body2);
+
+        background: #424242;
+        color: #9e9e9e;        
+        display: block;
+        padding: 16px 40px;                
+      }
+
+      a {
+        color: inherit;        
+        text-decoration: none;
+      }
+
+      .bottom-section {
+        @apply(--paper-font-body2);
+      }                              
+
+      .bottom-section-item {
+        margin-right: 16px;
+      }                   
+
+      .section-title {
+        color: #fff;
+      }
+    </style>    
 
     <footer>            
       <app-toolbar class="bottom-section">
@@ -17,6 +43,5 @@
     </footer>    
   </template>
 
-  <script>Polymer({is:"page-footer"});</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="page-footer.js"></script></body></html>

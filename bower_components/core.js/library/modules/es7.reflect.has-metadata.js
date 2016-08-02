@@ -1,1 +1,16 @@
-var metadata=require("./_metadata"),anObject=require("./_an-object"),getPrototypeOf=require("./_object-gpo"),ordinaryHasOwnMetadata=metadata.has,toMetaKey=metadata.key,ordinaryHasMetadata=function(a,t,e){var r=ordinaryHasOwnMetadata(a,t,e);if(r)return!0;var n=getPrototypeOf(t);return null!==n&&ordinaryHasMetadata(a,n,e)};metadata.exp({hasMetadata:function(a,t){return ordinaryHasMetadata(a,anObject(t),arguments.length<3?void 0:toMetaKey(arguments[2]))}});
+var metadata               = require('./_metadata')
+  , anObject               = require('./_an-object')
+  , getPrototypeOf         = require('./_object-gpo')
+  , ordinaryHasOwnMetadata = metadata.has
+  , toMetaKey              = metadata.key;
+
+var ordinaryHasMetadata = function(MetadataKey, O, P){
+  var hasOwn = ordinaryHasOwnMetadata(MetadataKey, O, P);
+  if(hasOwn)return true;
+  var parent = getPrototypeOf(O);
+  return parent !== null ? ordinaryHasMetadata(MetadataKey, parent, P) : false;
+};
+
+metadata.exp({hasMetadata: function hasMetadata(metadataKey, target /*, targetKey */){
+  return ordinaryHasMetadata(metadataKey, anObject(target), arguments.length < 3 ? undefined : toMetaKey(arguments[2]));
+}});

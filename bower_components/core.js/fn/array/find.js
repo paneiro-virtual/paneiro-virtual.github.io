@@ -1,1 +1,2 @@
-require("../../modules/es6.array.find"),module.exports=require("../../modules/_core").Array.find;
+require('../../modules/es6.array.find');
+module.exports = require('../../modules/_core').Array.find;

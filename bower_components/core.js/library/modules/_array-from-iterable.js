@@ -1,1 +1,7 @@
-var forOf=require("./_for-of");module.exports=function(r,f){var o=[];return forOf(r,!1,o.push,o,f),o};
+var forOf = require('./_for-of');
+
+module.exports = function(iter, ITERATOR){
+  var result = [];
+  forOf(iter, false, result.push, result, ITERATOR);
+  return result;
+};

@@ -1,1 +1,9 @@
-"use strict";var $export=require("./_export"),$at=require("./_string-at")(!1);$export($export.P,"String",{codePointAt:function(t){return $at(this,t)}});
+'use strict';
+var $export = require('./_export')
+  , $at     = require('./_string-at')(false);
+$export($export.P, 'String', {
+  // 21.1.3.3 String.prototype.codePointAt(pos)
+  codePointAt: function codePointAt(pos){
+    return $at(this, pos);
+  }
+});

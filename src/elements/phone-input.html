@@ -2,10 +2,13 @@
 
 </head><body><dom-module id="phone-input">
   <template>
-    <style>:host{display:block;}</style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
         
     <paper-input auto-validate="{{autoValidate}}" error-message="{{errorMessage}}" label="{{label}}" name="{{name}}" required="{{required}}" disabled="{{disabled}}" value="{{value}}" maxlength="15" minlength="14" on-input="change" pattern="^\(92\)\s\d{4,5}-\d{4}$"></paper-input>    
   </template>
-  <script>Polymer({is:"phone-input",properties:{autoValidate:Boolean,errorMessage:String,label:String,name:String,disabled:Boolean,required:Boolean,value:String},change:function(e){var a=e.target.value,t="",r=0;a.length>=5&&(a=a.substr(5));for(var l=0,n=a.length;l<n&&l<10;++l)10===n?5===r&&(t+="-",++r):4===r&&(t+="-",++r),isNaN(a.charAt(l))||(t+=a.charAt(l),++r);""!==t?e.target.value="(92) "+t:e.target.value="",e.target.validate()}});</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="phone-input.js"></script></body></html>

@@ -1,7 +1,18 @@
-<!DOCTYPE html><html><head>
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
   <meta charset="UTF-8">
   <title>paper-menu-button basic tests</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
@@ -16,7 +27,7 @@
 
   <test-fixture id="TrivialMenuButton">
     <template>
-      <paper-menu-button no-animations="">
+      <paper-menu-button no-animations>
         <span class="dropdown-trigger">trigger</span>
         <span class="dropdown-content">content</span>
       </paper-menu-button>
@@ -25,18 +36,164 @@
 
   <test-fixture id="TwoMenuButtons">
     <template>
-      <paper-menu-button no-animations="">
+      <paper-menu-button no-animations>
         <span class="dropdown-trigger">trigger</span>
         <span class="dropdown-content">content</span>
       </paper-menu-button>
-      <paper-menu-button no-animations="">
+      <paper-menu-button no-animations>
         <span class="dropdown-trigger">trigger</span>
         <span class="dropdown-content">content</span>
       </paper-menu-button>
     </template>
   </test-fixture>
 
-  <script>suite("<paper-menu-button>",function(){var e,t,o;setup(function(){e=fixture("TrivialMenuButton"),t=Polymer.dom(e).querySelector(".dropdown-trigger"),o=Polymer.dom(e).querySelector(".dropdown-content")}),test("opens when trigger is clicked",function(n){var r;r=o.getBoundingClientRect(),expect(r.width).to.be.equal(0),expect(r.height).to.be.equal(0),e.addEventListener("paper-dropdown-open",function(){expect(e.opened).to.be.equal(!0),n()}),MockInteractions.tap(t)}),test("closes when trigger is clicked again",function(o){e.addEventListener("paper-dropdown-open",function(){e.addEventListener("paper-dropdown-close",function(){expect(e.opened).to.be.equal(!1),o()}),Polymer.Base.async(function(){MockInteractions.tap(t)})}),MockInteractions.tap(t)}),test("closes when disabled while open",function(){var t;e.opened=!0,e.disabled=!0,expect(e.opened).to.be.equal(!1),t=o.getBoundingClientRect(),expect(t.width).to.be.equal(0),expect(t.height).to.be.equal(0)}),test("has aria-haspopup attribute",function(){expect(e.hasAttribute("aria-haspopup")).to.be.equal(!0)}),test("closes on iron-activate if close-on-activate is true",function(n){e.closeOnActivate=!0,e.addEventListener("paper-dropdown-open",function(){e.addEventListener("paper-dropdown-close",function(){n()}),o.dispatchEvent(new CustomEvent("iron-activate",{bubbles:!0,cancelable:!0}))}),MockInteractions.tap(t)}),test("allowOutsideScroll propagates to <iron-dropdown>",function(){e.allowOutsideScroll=!1,expect(e.$.dropdown.allowOutsideScroll).to.be.equal(!1),e.allowOutsideScroll=!0,expect(e.$.dropdown.allowOutsideScroll).to.be.equal(!0)}),test("restoreFocusOnClose propagates to <iron-dropdown>",function(){e.restoreFocusOnClose=!1,expect(e.$.dropdown.restoreFocusOnClose).to.be.equal(!1),e.restoreFocusOnClose=!0,expect(e.$.dropdown.restoreFocusOnClose).to.be.equal(!0)})}),suite("when there are two buttons",function(){var e,t,o,n;setup(function(){var r=fixture("TwoMenuButtons");e=r[0],o=r[1],t=Polymer.dom(e).querySelector(".dropdown-trigger"),n=Polymer.dom(o).querySelector(".dropdown-trigger")}),test("closes current and opens other",function(r){expect(e.opened).to.be.equal(!1),expect(o.opened).to.be.equal(!1),e.addEventListener("iron-overlay-opened",function(){expect(e.opened).to.be.equal(!0),expect(o.opened).to.be.equal(!1);var t=!1,a=!1;e.addEventListener("paper-dropdown-close",function(){t=!0}),o.addEventListener("paper-dropdown-open",function(){a=!0}),Polymer.Base.async(function(){MockInteractions.tap(n)}),Polymer.Base.async(function(){expect(t).to.be.equal(!0),expect(a).to.be.equal(!0),r()})}),MockInteractions.tap(t)})});</script>
+  <script>
+    suite('<paper-menu-button>', function() {
+      var menuButton;
+      var trigger;
+      var content;
 
+      setup(function() {
+        menuButton = fixture('TrivialMenuButton');
+        trigger = Polymer.dom(menuButton).querySelector('.dropdown-trigger');
+        content = Polymer.dom(menuButton).querySelector('.dropdown-content');
+      });
 
-</body></html>
+      test('opens when trigger is clicked', function(done) {
+        var contentRect;
+
+        contentRect = content.getBoundingClientRect();
+
+        expect(contentRect.width).to.be.equal(0);
+        expect(contentRect.height).to.be.equal(0);
+
+        menuButton.addEventListener('paper-dropdown-open', function() {
+          expect(menuButton.opened).to.be.equal(true);
+          done();
+        });
+
+        MockInteractions.tap(trigger);
+      });
+
+      test('closes when trigger is clicked again', function(done) {
+        menuButton.addEventListener('paper-dropdown-open', function() {
+          menuButton.addEventListener('paper-dropdown-close', function() {
+            expect(menuButton.opened).to.be.equal(false);
+            done();
+          });
+
+          Polymer.Base.async(function() {
+            MockInteractions.tap(trigger);
+          });
+        });
+        
+        MockInteractions.tap(trigger);
+      });
+
+      test('closes when disabled while open', function() {
+        var contentRect;
+
+        menuButton.opened = true;
+        menuButton.disabled = true;
+
+        expect(menuButton.opened).to.be.equal(false);
+
+        contentRect = content.getBoundingClientRect();
+        expect(contentRect.width).to.be.equal(0);
+        expect(contentRect.height).to.be.equal(0);
+      });
+
+      test('has aria-haspopup attribute', function() {
+        expect(menuButton.hasAttribute('aria-haspopup')).to.be.equal(true);
+      });
+
+      test('closes on iron-activate if close-on-activate is true', function(done) {
+        menuButton.closeOnActivate = true;
+
+        menuButton.addEventListener('paper-dropdown-open', function() {
+          menuButton.addEventListener('paper-dropdown-close', function() {
+            done();
+          });
+
+          content.dispatchEvent(new CustomEvent('iron-activate', {
+            bubbles: true,
+            cancelable: true
+          }));
+        });
+
+        MockInteractions.tap(trigger);
+      });
+
+      test('allowOutsideScroll propagates to <iron-dropdown>', function() {
+        menuButton.allowOutsideScroll = false;
+        expect(menuButton.$.dropdown.allowOutsideScroll).to.be.equal(false);
+        menuButton.allowOutsideScroll = true;
+        expect(menuButton.$.dropdown.allowOutsideScroll).to.be.equal(true);
+      });
+
+      test('restoreFocusOnClose propagates to <iron-dropdown>', function() {
+        menuButton.restoreFocusOnClose = false;
+        expect(menuButton.$.dropdown.restoreFocusOnClose).to.be.equal(false);
+        menuButton.restoreFocusOnClose = true;
+        expect(menuButton.$.dropdown.restoreFocusOnClose).to.be.equal(true);
+      });
+
+    });
+
+    suite('when there are two buttons', function() {
+      var menuButton;
+      var trigger;
+      var otherButton;
+      var otherTrigger;
+
+      setup(function() {
+        var buttons = fixture('TwoMenuButtons');
+        menuButton = buttons[0];
+        otherButton = buttons[1];
+        trigger = Polymer.dom(menuButton).querySelector('.dropdown-trigger');
+        otherTrigger = Polymer.dom(otherButton).querySelector('.dropdown-trigger');
+      });
+
+      test('closes current and opens other', function(done) {
+        expect(menuButton.opened).to.be.equal(false);
+        expect(otherButton.opened).to.be.equal(false);
+
+        /*
+          NOTE: iron-overlay-behavior adds listeners asynchronously when the
+          overlay opens, so we need to wait for this event which is a
+          more-explicit signal that tells us that the overlay is really opened.
+         */
+        menuButton.addEventListener('iron-overlay-opened', function() {
+          expect(menuButton.opened).to.be.equal(true);
+          expect(otherButton.opened).to.be.equal(false);
+
+          var firstClosed = false;
+          var secondOpened = false;
+
+          menuButton.addEventListener('paper-dropdown-close', function() {
+            firstClosed = true;
+          });
+
+          otherButton.addEventListener('paper-dropdown-open', function() {
+            secondOpened = true;
+          });
+
+          Polymer.Base.async(function() {
+            MockInteractions.tap(otherTrigger);
+          });
+          
+
+          Polymer.Base.async(function() {
+            expect(firstClosed).to.be.equal(true);
+            expect(secondOpened).to.be.equal(true);
+
+            done();
+          });
+        });
+
+        MockInteractions.tap(trigger);
+      });
+    });
+  </script>
+</body>
+</html>

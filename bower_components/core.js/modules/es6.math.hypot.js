@@ -1,1 +1,25 @@
-var $export=require("./_export"),abs=Math.abs;$export($export.S,"Math",{hypot:function(r,t){for(var a,e,o=0,h=0,p=arguments.length,n=0;h<p;)a=abs(arguments[h++]),n<a?(e=n/a,o=o*e*e+1,n=a):a>0?(e=a/n,o+=e*e):o+=a;return n===1/0?1/0:n*Math.sqrt(o)}});
+// 20.2.2.17 Math.hypot([value1[, value2[, … ]]])
+var $export = require('./_export')
+  , abs     = Math.abs;
+
+$export($export.S, 'Math', {
+  hypot: function hypot(value1, value2){ // eslint-disable-line no-unused-vars
+    var sum  = 0
+      , i    = 0
+      , aLen = arguments.length
+      , larg = 0
+      , arg, div;
+    while(i < aLen){
+      arg = abs(arguments[i++]);
+      if(larg < arg){
+        div  = larg / arg;
+        sum  = sum * div * div + 1;
+        larg = arg;
+      } else if(arg > 0){
+        div  = arg / larg;
+        sum += div * div;
+      } else sum += arg;
+    }
+    return larg === Infinity ? Infinity : larg * Math.sqrt(sum);
+  }
+});

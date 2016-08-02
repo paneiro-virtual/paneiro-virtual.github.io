@@ -1,1 +1,10 @@
-"use strict";var $export=require("./_export"),$at=require("./_string-at")(!0);$export($export.P,"String",{at:function(t){return $at(this,t)}});
+'use strict';
+// https://github.com/mathiasbynens/String.prototype.at
+var $export = require('./_export')
+  , $at     = require('./_string-at')(true);
+
+$export($export.P, 'String', {
+  at: function at(pos){
+    return $at(this, pos);
+  }
+});

@@ -12,7 +12,24 @@
 
 </head><body><dom-module id="page-header">
   <template>
-    <style type="text/css">:host{display:block;}app-header{background:var(--primary-color);color:#fff;}#headerLogo{display:inline-block;height:auto;margin-left:20px;width:200px;vertical-align:middle;}</style>    
+    <style type="text/css">
+      :host {        
+        display: block;                        
+      }                  
+
+      app-header {        
+        background: var(--primary-color);
+        color: #fff;                                     
+      }          
+
+      #headerLogo {
+        display: inline-block;
+        height: auto;
+        margin-left: 20px;
+        width: 200px;
+        vertical-align: middle;
+      }                        
+    </style>    
     
     <app-header-layout>
       <app-header shadow="" condenses="" fixed="" reveals="" effects="blend-background">
@@ -27,6 +44,5 @@
     </app-header-layout>            
   </template>
 
-  <script>Polymer({is:"page-header"});</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="page-header.js"></script></body></html>

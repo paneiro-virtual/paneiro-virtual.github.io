@@ -1,1 +1,0 @@
-module.exports=function(s){s.config("watch",{styles:{files:"./assets/_sass/**/*.scss",tasks:["compass:dev"]}}),s.loadNpmTasks("grunt-contrib-watch")};

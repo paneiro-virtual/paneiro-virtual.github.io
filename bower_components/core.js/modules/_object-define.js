@@ -1,1 +1,12 @@
-var dP=require("./_object-dp"),gOPD=require("./_object-gopd"),ownKeys=require("./_own-keys"),toIObject=require("./_to-iobject");module.exports=function(e,o){for(var r,t=ownKeys(toIObject(o)),n=t.length,u=0;n>u;)dP.f(e,r=t[u++],gOPD.f(o,r));return e};
+var dP        = require('./_object-dp')
+  , gOPD      = require('./_object-gopd')
+  , ownKeys   = require('./_own-keys')
+  , toIObject = require('./_to-iobject');
+
+module.exports = function define(target, mixin){
+  var keys   = ownKeys(toIObject(mixin))
+    , length = keys.length
+    , i = 0, key;
+  while(length > i)dP.f(target, key = keys[i++], gOPD.f(mixin, key));
+  return target;
+};

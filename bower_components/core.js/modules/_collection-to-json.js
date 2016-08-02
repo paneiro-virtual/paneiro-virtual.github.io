@@ -1,1 +1,9 @@
-var classof=require("./_classof"),from=require("./_array-from-iterable");module.exports=function(r){return function(){if(classof(this)!=r)throw TypeError(r+"#toJSON isn't generic");return from(this)}};
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+var classof = require('./_classof')
+  , from    = require('./_array-from-iterable');
+module.exports = function(NAME){
+  return function toJSON(){
+    if(classof(this) != NAME)throw TypeError(NAME + "#toJSON isn't generic");
+    return from(this);
+  };
+};

@@ -1,1 +1,19 @@
-"use strict";var $export=require("./_export"),createProperty=require("./_create-property");$export($export.S+$export.F*require("./_fails")(function(){function r(){}return!(Array.of.call(r)instanceof r)}),"Array",{of:function(){for(var r=0,e=arguments.length,t=new("function"==typeof this?this:Array)(e);e>r;)createProperty(t,r,arguments[r++]);return t.length=e,t}});
+'use strict';
+var $export        = require('./_export')
+  , createProperty = require('./_create-property');
+
+// WebKit Array.of isn't generic
+$export($export.S + $export.F * require('./_fails')(function(){
+  function F(){}
+  return !(Array.of.call(F) instanceof F);
+}), 'Array', {
+  // 22.1.2.3 Array.of( ...items)
+  of: function of(/* ...args */){
+    var index  = 0
+      , aLen   = arguments.length
+      , result = new (typeof this == 'function' ? this : Array)(aLen);
+    while(aLen > index)createProperty(result, index, arguments[index++]);
+    result.length = aLen;
+    return result;
+  }
+});

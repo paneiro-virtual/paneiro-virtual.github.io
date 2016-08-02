@@ -1,1 +1,113 @@
-"use strict";var $export=require("./_export"),toInteger=require("./_to-integer"),aNumberValue=require("./_a-number-value"),repeat=require("./_string-repeat"),$toFixed=1..toFixed,floor=Math.floor,data=[0,0,0,0,0,0],ERROR="Number.toFixed: incorrect invocation!",ZERO="0",multiply=function(e,r){for(var t=-1,i=r;++t<6;)i+=e*data[t],data[t]=i%1e7,i=floor(i/1e7)},divide=function(e){for(var r=6,t=0;--r>=0;)t+=data[r],data[r]=floor(t/e),t=t%e*1e7},numToString=function(){for(var e=6,r="";--e>=0;)if(""!==r||0===e||0!==data[e]){var t=String(data[e]);r=""===r?t:r+repeat.call(ZERO,7-t.length)+t}return r},pow=function(e,r,t){return 0===r?t:r%2===1?pow(e,r-1,t*e):pow(e*e,r/2,t)},log=function(e){for(var r=0,t=e;t>=4096;)r+=12,t/=4096;for(;t>=2;)r+=1,t/=2;return r};$export($export.P+$export.F*(!!$toFixed&&("0.000"!==8e-5.toFixed(3)||"1"!==.9.toFixed(0)||"1.25"!==1.255.toFixed(2)||"1000000000000000128"!==(0xde0b6b3a7640080).toFixed(0))||!require("./_fails")(function(){$toFixed.call({})})),"Number",{toFixed:function(e){var r,t,i,o,a=aNumberValue(this,ERROR),n=toInteger(e),l="",u=ZERO;if(n<0||n>20)throw RangeError(ERROR);if(a!=a)return"NaN";if(a<=-1e21||a>=1e21)return String(a);if(a<0&&(l="-",a=-a),a>1e-21)if(r=log(a*pow(2,69,1))-69,t=r<0?a*pow(2,-r,1):a/pow(2,r,1),t*=4503599627370496,r=52-r,r>0){for(multiply(0,t),i=n;i>=7;)multiply(1e7,0),i-=7;for(multiply(pow(10,i,1),0),i=r-1;i>=23;)divide(1<<23),i-=23;divide(1<<i),multiply(1,1),divide(2),u=numToString()}else multiply(0,t),multiply(1<<-r,0),u=numToString()+repeat.call(ZERO,n);return n>0?(o=u.length,u=l+(o<=n?"0."+repeat.call(ZERO,n-o)+u:u.slice(0,o-n)+"."+u.slice(o-n))):u=l+u,u}});
+'use strict';
+var $export      = require('./_export')
+  , toInteger    = require('./_to-integer')
+  , aNumberValue = require('./_a-number-value')
+  , repeat       = require('./_string-repeat')
+  , $toFixed     = 1..toFixed
+  , floor        = Math.floor
+  , data         = [0, 0, 0, 0, 0, 0]
+  , ERROR        = 'Number.toFixed: incorrect invocation!'
+  , ZERO         = '0';
+
+var multiply = function(n, c){
+  var i  = -1
+    , c2 = c;
+  while(++i < 6){
+    c2 += n * data[i];
+    data[i] = c2 % 1e7;
+    c2 = floor(c2 / 1e7);
+  }
+};
+var divide = function(n){
+  var i = 6
+    , c = 0;
+  while(--i >= 0){
+    c += data[i];
+    data[i] = floor(c / n);
+    c = (c % n) * 1e7;
+  }
+};
+var numToString = function(){
+  var i = 6
+    , s = '';
+  while(--i >= 0){
+    if(s !== '' || i === 0 || data[i] !== 0){
+      var t = String(data[i]);
+      s = s === '' ? t : s + repeat.call(ZERO, 7 - t.length) + t;
+    }
+  } return s;
+};
+var pow = function(x, n, acc){
+  return n === 0 ? acc : n % 2 === 1 ? pow(x, n - 1, acc * x) : pow(x * x, n / 2, acc);
+};
+var log = function(x){
+  var n  = 0
+    , x2 = x;
+  while(x2 >= 4096){
+    n += 12;
+    x2 /= 4096;
+  }
+  while(x2 >= 2){
+    n  += 1;
+    x2 /= 2;
+  } return n;
+};
+
+$export($export.P + $export.F * (!!$toFixed && (
+  0.00008.toFixed(3) !== '0.000' ||
+  0.9.toFixed(0) !== '1' ||
+  1.255.toFixed(2) !== '1.25' ||
+  1000000000000000128..toFixed(0) !== '1000000000000000128'
+) || !require('./_fails')(function(){
+  // V8 ~ Android 4.3-
+  $toFixed.call({});
+})), 'Number', {
+  toFixed: function toFixed(fractionDigits){
+    var x = aNumberValue(this, ERROR)
+      , f = toInteger(fractionDigits)
+      , s = ''
+      , m = ZERO
+      , e, z, j, k;
+    if(f < 0 || f > 20)throw RangeError(ERROR);
+    if(x != x)return 'NaN';
+    if(x <= -1e21 || x >= 1e21)return String(x);
+    if(x < 0){
+      s = '-';
+      x = -x;
+    }
+    if(x > 1e-21){
+      e = log(x * pow(2, 69, 1)) - 69;
+      z = e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1);
+      z *= 0x10000000000000;
+      e = 52 - e;
+      if(e > 0){
+        multiply(0, z);
+        j = f;
+        while(j >= 7){
+          multiply(1e7, 0);
+          j -= 7;
+        }
+        multiply(pow(10, j, 1), 0);
+        j = e - 1;
+        while(j >= 23){
+          divide(1 << 23);
+          j -= 23;
+        }
+        divide(1 << j);
+        multiply(1, 1);
+        divide(2);
+        m = numToString();
+      } else {
+        multiply(0, z);
+        multiply(1 << -e, 0);
+        m = numToString() + repeat.call(ZERO, f);
+      }
+    }
+    if(f > 0){
+      k = m.length;
+      m = s + (k <= f ? '0.' + repeat.call(ZERO, f - k) + m : m.slice(0, k - f) + '.' + m.slice(k - f));
+    } else {
+      m = s + m;
+    } return m;
+  }
+});

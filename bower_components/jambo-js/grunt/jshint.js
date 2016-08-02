@@ -1,1 +1,10 @@
-module.exports=function(o){o.config("jshint",{beforeConcat:["src/**/*.js","!src/intro.js","!src/outro.js"],afterConcat:["dist/jambo.js"]}),o.loadNpmTasks("grunt-contrib-jshint")};
+module.exports = function(grunt) {
+
+    grunt.config('jshint', {
+        beforeConcat: ['src/**/*.js', '!src/intro.js', '!src/outro.js'],
+        afterConcat: ['dist/jambo.js']
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
+};

@@ -1,1 +1,7 @@
-"use strict";require("./_string-html")("fontcolor",function(t){return function(r){return t(this,"font","color",r)}});
+'use strict';
+// B.2.3.7 String.prototype.fontcolor(color)
+require('./_string-html')('fontcolor', function(createHTML){
+  return function fontcolor(color){
+    return createHTML(this, 'font', 'color', color);
+  }
+});

@@ -1,1 +1,14 @@
-"use strict";var global=require("./_global"),core=require("./_core"),dP=require("./_object-dp"),DESCRIPTORS=require("./_descriptors"),SPECIES=require("./_wks")("species");module.exports=function(e){var r="function"==typeof core[e]?core[e]:global[e];DESCRIPTORS&&r&&!r[SPECIES]&&dP.f(r,SPECIES,{configurable:!0,get:function(){return this}})};
+'use strict';
+var global      = require('./_global')
+  , core        = require('./_core')
+  , dP          = require('./_object-dp')
+  , DESCRIPTORS = require('./_descriptors')
+  , SPECIES     = require('./_wks')('species');
+
+module.exports = function(KEY){
+  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
+  if(DESCRIPTORS && C && !C[SPECIES])dP.f(C, SPECIES, {
+    configurable: true,
+    get: function(){ return this; }
+  });
+};

@@ -1,1 +1,21 @@
-function get(e,t){var r,o,g=arguments.length<3?e:arguments[2];return anObject(e)===g?e[t]:(r=gOPD.f(e,t))?has(r,"value")?r.value:void 0!==r.get?r.get.call(g):void 0:isObject(o=getPrototypeOf(e))?get(o,t,g):void 0}var gOPD=require("./_object-gopd"),getPrototypeOf=require("./_object-gpo"),has=require("./_has"),$export=require("./_export"),isObject=require("./_is-object"),anObject=require("./_an-object");$export($export.S,"Reflect",{get:get});
+// 26.1.6 Reflect.get(target, propertyKey [, receiver])
+var gOPD           = require('./_object-gopd')
+  , getPrototypeOf = require('./_object-gpo')
+  , has            = require('./_has')
+  , $export        = require('./_export')
+  , isObject       = require('./_is-object')
+  , anObject       = require('./_an-object');
+
+function get(target, propertyKey/*, receiver*/){
+  var receiver = arguments.length < 3 ? target : arguments[2]
+    , desc, proto;
+  if(anObject(target) === receiver)return target[propertyKey];
+  if(desc = gOPD.f(target, propertyKey))return has(desc, 'value')
+    ? desc.value
+    : desc.get !== undefined
+      ? desc.get.call(receiver)
+      : undefined;
+  if(isObject(proto = getPrototypeOf(target)))return get(proto, propertyKey, receiver);
+}
+
+$export($export.S, 'Reflect', {get: get});

@@ -22,7 +22,95 @@
 
 </head><body><dom-module id="checkout-page">
   <template>
-    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}header{padding:0 8px;}main{padding:48px 0;}.page-title{@apply (--paper-font-display1);margin-bottom:20px;font-weight:300;text-align:center;}.divider{height:1px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}.divider-border{height:100%;width:100px;max-width:100%;background:var(--primary-color);}paper-button{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:0;}#checkoutForm{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;}.input{margin:8px;}.input-name, .input-email{width:calc(66.666666% - 16px);}.input-cpf, .input-phone{width:calc(33.333333% - 16px);}.input-address, .paper-button-container{width:calc(100% - 16px);}.input-delivery-day, .input-delivery-time{width:calc(50% - 16px);}.paper-button-container{margin:8px;text-align:center;}@media screen and (max-width: 768px){.input-name, .input-email, .input-cpf, .input-phone{width:calc(100% - 16px);}}</style>            
+    <style type="text/css">
+      :host {
+        display: block;
+        @apply(--paper-font-common-base);
+      }    
+
+      header {
+        padding: 0 8px;
+      }
+
+      main {
+        padding: 48px 0;
+      }
+
+      .page-title {
+        @apply(--paper-font-display1);
+        margin-bottom: 20px;
+        font-weight: 300;
+        text-align: center;
+      }     
+
+      .divider {
+        height: 1px;
+        width: 100%;                
+
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        justify-content: center;
+      } 
+
+      .divider-border {        
+        height: 100%;
+        width: 100px;
+        max-width: 100%;
+        background: var(--primary-color);        
+      }      
+
+      paper-button {
+        @apply(--paper-font-button);
+        background: var(--primary-color);
+        color: #fff;
+        margin: 0;
+      }    
+
+      #checkoutForm {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+      }
+
+      .input {
+        margin: 8px;
+      }
+
+      .input-name, .input-email {
+        width: calc(66.666666% - 16px);
+      }
+
+      .input-cpf, .input-phone {
+        width: calc(33.333333% - 16px);
+      }
+
+      .input-address, .paper-button-container {
+        width: calc(100% - 16px);
+      }
+
+      .input-delivery-day, .input-delivery-time {
+        width: calc(50% - 16px);
+      }
+
+      .paper-button-container {
+        margin: 8px;
+        text-align: center;
+      }                  
+
+      @media screen and (max-width: 768px) {
+        .input-name, .input-email, .input-cpf, .input-phone {
+          width: calc(100% - 16px);
+        }
+      }
+    </style>            
 
     <iron-location id="ironLocation"></iron-location>
 
@@ -75,95 +163,5 @@
     </paper-toast>    
   </template>
 
-  <script>
-    (function(window, document, undefined, paneiro, jambo) {
-      Polymer({
-        is: 'checkout-page',
-
-        properties: {              
-          user: Object,
-          cart: Object,
-          days: {
-            type: Array,
-            notify: true
-          }
-        },
-
-        ready: function() {          
-          if (this.cart.items.length === 0) {
-            this.$.ironLocation.path = '/loja/categoria/petshop';
-          } else {
-            var weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-            var d = new Date();
-            this.days = [];
-
-            if (d.getDay() <= 1) {
-              var diff = 3 - d.getDay();
-              d.setDate(d.getDate() + diff);
-            } else if (d.getDay() <= 4) {
-              var diff = 6 - d.getDay();
-              d.setDate(d.getDate() + diff);
-            } else {
-              var diff = 7 - d.getDay() + 3;
-              d.setDate(d.getDate() + diff);
-            }
-
-            for (var i = 0; i < 4; ++i) {
-              this.push('days', {
-                label: weekDays[d.getDay()] + ' - ' + d.getDate() + '/' + (d.getMonth() + 1),
-                value: d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
-              });            
-
-              if (d.getDay() === 3) {
-                d.setDate(d.getDate() + 3);
-              } else {
-                d.setDate(d.getDate() + 4);
-              }
-            }
-          }          
-        },
-
-        onCheckoutFormPreSubmit: function(e) {
-          e.preventDefault();
-
-          var toast = this.$.toast;
-          var modal = paneiro.modals.message;
-          var formData = this.$.checkoutForm.serialize();                    
-
-          toast.open();
-
-          var deliveryDatetime = this.$.dateMenu.selectedItem.getAttribute('data-value') + ' ' +
-            this.$.timeMenu.selectedItem.getAttribute('data-value');    
-          paneiro.api.purchase.checkout({
-            phone: this.user.phone,
-            addr: formData.addr,
-            deliveryDate: deliveryDatetime
-          }).then(response => {
-            toast.close();
-
-            modal.message = 'Seu pedido foi registrado com sucesso, e será entregue na data e horário agendados.\n' + 
-              'Caso seja necessário, entraremos em contato.\n' +
-              'Agradecemos a preferência e até a próxima!';  
-            modal.title = 'Pedido registrado com sucesso.';
-
-            modal.open();
-
-            this.set('cart.items', []);
-            this.set('cart.total', 0);            
-
-            this.$.ironLocation.set('path', '/loja/categoria/petshop');            
-          }).catch(response => console.log(response));          
-        },
-
-        onCheckoutFormButtonTap: function() {          
-          if (!this.$.checkoutForm.validate()) {
-            return;
-          } 
-
-          this.$.checkoutForm.submit();          
-        }
-      });
-    })(window, document, undefined, paneiro, jambo);    
-  </script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="checkout-page.js"></script></body></html>

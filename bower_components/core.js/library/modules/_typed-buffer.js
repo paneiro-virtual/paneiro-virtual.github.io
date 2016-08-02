@@ -1,1 +1,273 @@
-"use strict";var global=require("./_global"),DESCRIPTORS=require("./_descriptors"),LIBRARY=require("./_library"),$typed=require("./_typed"),hide=require("./_hide"),redefineAll=require("./_redefine-all"),fails=require("./_fails"),anInstance=require("./_an-instance"),toInteger=require("./_to-integer"),toLength=require("./_to-length"),gOPN=require("./_object-gopn").f,dP=require("./_object-dp").f,arrayFill=require("./_array-fill"),setToStringTag=require("./_set-to-string-tag"),ARRAY_BUFFER="ArrayBuffer",DATA_VIEW="DataView",PROTOTYPE="prototype",WRONG_LENGTH="Wrong length!",WRONG_INDEX="Wrong index!",$ArrayBuffer=global[ARRAY_BUFFER],$DataView=global[DATA_VIEW],Math=global.Math,RangeError=global.RangeError,Infinity=global.Infinity,BaseBuffer=$ArrayBuffer,abs=Math.abs,pow=Math.pow,floor=Math.floor,log=Math.log,LN2=Math.LN2,BUFFER="buffer",BYTE_LENGTH="byteLength",BYTE_OFFSET="byteOffset",$BUFFER=DESCRIPTORS?"_b":BUFFER,$LENGTH=DESCRIPTORS?"_l":BYTE_LENGTH,$OFFSET=DESCRIPTORS?"_o":BYTE_OFFSET,packIEEE754=function(t,e,r){var n,a,i,f=Array(r),o=8*r-e-1,u=(1<<o)-1,s=u>>1,E=23===e?pow(2,-24)-pow(2,-77):0,c=0,g=t<0||0===t&&1/t<0?1:0;for(t=abs(t),t!=t||t===Infinity?(a=t!=t?1:0,n=u):(n=floor(log(t)/LN2),t*(i=pow(2,-n))<1&&(n--,i*=2),t+=n+s>=1?E/i:E*pow(2,1-s),t*i>=2&&(n++,i/=2),n+s>=u?(a=0,n=u):n+s>=1?(a=(t*i-1)*pow(2,e),n+=s):(a=t*pow(2,s-1)*pow(2,e),n=0));e>=8;f[c++]=255&a,a/=256,e-=8);for(n=n<<e|a,o+=e;o>0;f[c++]=255&n,n/=256,o-=8);return f[--c]|=128*g,f},unpackIEEE754=function(t,e,r){var n,a=8*r-e-1,i=(1<<a)-1,f=i>>1,o=a-7,u=r-1,s=t[u--],E=127&s;for(s>>=7;o>0;E=256*E+t[u],u--,o-=8);for(n=E&(1<<-o)-1,E>>=-o,o+=e;o>0;n=256*n+t[u],u--,o-=8);if(0===E)E=1-f;else{if(E===i)return n?NaN:s?-Infinity:Infinity;n+=pow(2,e),E-=f}return(s?-1:1)*n*pow(2,E-e)},unpackI32=function(t){return t[3]<<24|t[2]<<16|t[1]<<8|t[0]},packI8=function(t){return[255&t]},packI16=function(t){return[255&t,t>>8&255]},packI32=function(t){return[255&t,t>>8&255,t>>16&255,t>>24&255]},packF64=function(t){return packIEEE754(t,52,8)},packF32=function(t){return packIEEE754(t,23,4)},addGetter=function(t,e,r){dP(t[PROTOTYPE],e,{get:function(){return this[r]}})},get=function(t,e,r,n){var a=+r,i=toInteger(a);if(a!=i||i<0||i+e>t[$LENGTH])throw RangeError(WRONG_INDEX);var f=t[$BUFFER]._b,o=i+t[$OFFSET],u=f.slice(o,o+e);return n?u:u.reverse()},set=function(t,e,r,n,a,i){var f=+r,o=toInteger(f);if(f!=o||o<0||o+e>t[$LENGTH])throw RangeError(WRONG_INDEX);for(var u=t[$BUFFER]._b,s=o+t[$OFFSET],E=n(+a),c=0;c<e;c++)u[s+c]=E[i?c:e-c-1]},validateArrayBufferArguments=function(t,e){anInstance(t,$ArrayBuffer,ARRAY_BUFFER);var r=+e,n=toLength(r);if(r!=n)throw RangeError(WRONG_LENGTH);return n};if($typed.ABV){if(!fails(function(){new $ArrayBuffer})||!fails(function(){new $ArrayBuffer(.5)})){$ArrayBuffer=function(t){return new BaseBuffer(validateArrayBufferArguments(this,t))};for(var ArrayBufferProto=$ArrayBuffer[PROTOTYPE]=BaseBuffer[PROTOTYPE],keys=gOPN(BaseBuffer),j=0,key;keys.length>j;)(key=keys[j++])in $ArrayBuffer||hide($ArrayBuffer,key,BaseBuffer[key]);LIBRARY||(ArrayBufferProto.constructor=$ArrayBuffer)}var view=new $DataView(new $ArrayBuffer(2)),$setInt8=$DataView[PROTOTYPE].setInt8;view.setInt8(0,2147483648),view.setInt8(1,2147483649),!view.getInt8(0)&&view.getInt8(1)||redefineAll($DataView[PROTOTYPE],{setInt8:function(t,e){$setInt8.call(this,t,e<<24>>24)},setUint8:function(t,e){$setInt8.call(this,t,e<<24>>24)}},!0)}else $ArrayBuffer=function(t){var e=validateArrayBufferArguments(this,t);this._b=arrayFill.call(Array(e),0),this[$LENGTH]=e},$DataView=function(t,e,r){anInstance(this,$DataView,DATA_VIEW),anInstance(t,$ArrayBuffer,DATA_VIEW);var n=t[$LENGTH],a=toInteger(e);if(a<0||a>n)throw RangeError("Wrong offset!");if(r=void 0===r?n-a:toLength(r),a+r>n)throw RangeError(WRONG_LENGTH);this[$BUFFER]=t,this[$OFFSET]=a,this[$LENGTH]=r},DESCRIPTORS&&(addGetter($ArrayBuffer,BYTE_LENGTH,"_l"),addGetter($DataView,BUFFER,"_b"),addGetter($DataView,BYTE_LENGTH,"_l"),addGetter($DataView,BYTE_OFFSET,"_o")),redefineAll($DataView[PROTOTYPE],{getInt8:function(t){return get(this,1,t)[0]<<24>>24},getUint8:function(t){return get(this,1,t)[0]},getInt16:function(t){var e=get(this,2,t,arguments[1]);return(e[1]<<8|e[0])<<16>>16},getUint16:function(t){var e=get(this,2,t,arguments[1]);return e[1]<<8|e[0]},getInt32:function(t){return unpackI32(get(this,4,t,arguments[1]))},getUint32:function(t){return unpackI32(get(this,4,t,arguments[1]))>>>0},getFloat32:function(t){return unpackIEEE754(get(this,4,t,arguments[1]),23,4)},getFloat64:function(t){return unpackIEEE754(get(this,8,t,arguments[1]),52,8)},setInt8:function(t,e){set(this,1,t,packI8,e)},setUint8:function(t,e){set(this,1,t,packI8,e)},setInt16:function(t,e){set(this,2,t,packI16,e,arguments[2])},setUint16:function(t,e){set(this,2,t,packI16,e,arguments[2])},setInt32:function(t,e){set(this,4,t,packI32,e,arguments[2])},setUint32:function(t,e){set(this,4,t,packI32,e,arguments[2])},setFloat32:function(t,e){set(this,4,t,packF32,e,arguments[2])},setFloat64:function(t,e){set(this,8,t,packF64,e,arguments[2])}});setToStringTag($ArrayBuffer,ARRAY_BUFFER),setToStringTag($DataView,DATA_VIEW),hide($DataView[PROTOTYPE],$typed.VIEW,!0),exports[ARRAY_BUFFER]=$ArrayBuffer,exports[DATA_VIEW]=$DataView;
+'use strict';
+var global         = require('./_global')
+  , DESCRIPTORS    = require('./_descriptors')
+  , LIBRARY        = require('./_library')
+  , $typed         = require('./_typed')
+  , hide           = require('./_hide')
+  , redefineAll    = require('./_redefine-all')
+  , fails          = require('./_fails')
+  , anInstance     = require('./_an-instance')
+  , toInteger      = require('./_to-integer')
+  , toLength       = require('./_to-length')
+  , gOPN           = require('./_object-gopn').f
+  , dP             = require('./_object-dp').f
+  , arrayFill      = require('./_array-fill')
+  , setToStringTag = require('./_set-to-string-tag')
+  , ARRAY_BUFFER   = 'ArrayBuffer'
+  , DATA_VIEW      = 'DataView'
+  , PROTOTYPE      = 'prototype'
+  , WRONG_LENGTH   = 'Wrong length!'
+  , WRONG_INDEX    = 'Wrong index!'
+  , $ArrayBuffer   = global[ARRAY_BUFFER]
+  , $DataView      = global[DATA_VIEW]
+  , Math           = global.Math
+  , RangeError     = global.RangeError
+  , Infinity       = global.Infinity
+  , BaseBuffer     = $ArrayBuffer
+  , abs            = Math.abs
+  , pow            = Math.pow
+  , floor          = Math.floor
+  , log            = Math.log
+  , LN2            = Math.LN2
+  , BUFFER         = 'buffer'
+  , BYTE_LENGTH    = 'byteLength'
+  , BYTE_OFFSET    = 'byteOffset'
+  , $BUFFER        = DESCRIPTORS ? '_b' : BUFFER
+  , $LENGTH        = DESCRIPTORS ? '_l' : BYTE_LENGTH
+  , $OFFSET        = DESCRIPTORS ? '_o' : BYTE_OFFSET;
+
+// IEEE754 conversions based on https://github.com/feross/ieee754
+var packIEEE754 = function(value, mLen, nBytes){
+  var buffer = Array(nBytes)
+    , eLen   = nBytes * 8 - mLen - 1
+    , eMax   = (1 << eLen) - 1
+    , eBias  = eMax >> 1
+    , rt     = mLen === 23 ? pow(2, -24) - pow(2, -77) : 0
+    , i      = 0
+    , s      = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0
+    , e, m, c;
+  value = abs(value)
+  if(value != value || value === Infinity){
+    m = value != value ? 1 : 0;
+    e = eMax;
+  } else {
+    e = floor(log(value) / LN2);
+    if(value * (c = pow(2, -e)) < 1){
+      e--;
+      c *= 2;
+    }
+    if(e + eBias >= 1){
+      value += rt / c;
+    } else {
+      value += rt * pow(2, 1 - eBias);
+    }
+    if(value * c >= 2){
+      e++;
+      c /= 2;
+    }
+    if(e + eBias >= eMax){
+      m = 0;
+      e = eMax;
+    } else if(e + eBias >= 1){
+      m = (value * c - 1) * pow(2, mLen);
+      e = e + eBias;
+    } else {
+      m = value * pow(2, eBias - 1) * pow(2, mLen);
+      e = 0;
+    }
+  }
+  for(; mLen >= 8; buffer[i++] = m & 255, m /= 256, mLen -= 8);
+  e = e << mLen | m;
+  eLen += mLen;
+  for(; eLen > 0; buffer[i++] = e & 255, e /= 256, eLen -= 8);
+  buffer[--i] |= s * 128;
+  return buffer;
+};
+var unpackIEEE754 = function(buffer, mLen, nBytes){
+  var eLen  = nBytes * 8 - mLen - 1
+    , eMax  = (1 << eLen) - 1
+    , eBias = eMax >> 1
+    , nBits = eLen - 7
+    , i     = nBytes - 1
+    , s     = buffer[i--]
+    , e     = s & 127
+    , m;
+  s >>= 7;
+  for(; nBits > 0; e = e * 256 + buffer[i], i--, nBits -= 8);
+  m = e & (1 << -nBits) - 1;
+  e >>= -nBits;
+  nBits += mLen;
+  for(; nBits > 0; m = m * 256 + buffer[i], i--, nBits -= 8);
+  if(e === 0){
+    e = 1 - eBias;
+  } else if(e === eMax){
+    return m ? NaN : s ? -Infinity : Infinity;
+  } else {
+    m = m + pow(2, mLen);
+    e = e - eBias;
+  } return (s ? -1 : 1) * m * pow(2, e - mLen);
+};
+
+var unpackI32 = function(bytes){
+  return bytes[3] << 24 | bytes[2] << 16 | bytes[1] << 8 | bytes[0];
+};
+var packI8 = function(it){
+  return [it & 0xff];
+};
+var packI16 = function(it){
+  return [it & 0xff, it >> 8 & 0xff];
+};
+var packI32 = function(it){
+  return [it & 0xff, it >> 8 & 0xff, it >> 16 & 0xff, it >> 24 & 0xff];
+};
+var packF64 = function(it){
+  return packIEEE754(it, 52, 8);
+};
+var packF32 = function(it){
+  return packIEEE754(it, 23, 4);
+};
+
+var addGetter = function(C, key, internal){
+  dP(C[PROTOTYPE], key, {get: function(){ return this[internal]; }});
+};
+
+var get = function(view, bytes, index, isLittleEndian){
+  var numIndex = +index
+    , intIndex = toInteger(numIndex);
+  if(numIndex != intIndex || intIndex < 0 || intIndex + bytes > view[$LENGTH])throw RangeError(WRONG_INDEX);
+  var store = view[$BUFFER]._b
+    , start = intIndex + view[$OFFSET]
+    , pack  = store.slice(start, start + bytes);
+  return isLittleEndian ? pack : pack.reverse();
+};
+var set = function(view, bytes, index, conversion, value, isLittleEndian){
+  var numIndex = +index
+    , intIndex = toInteger(numIndex);
+  if(numIndex != intIndex || intIndex < 0 || intIndex + bytes > view[$LENGTH])throw RangeError(WRONG_INDEX);
+  var store = view[$BUFFER]._b
+    , start = intIndex + view[$OFFSET]
+    , pack  = conversion(+value);
+  for(var i = 0; i < bytes; i++)store[start + i] = pack[isLittleEndian ? i : bytes - i - 1];
+};
+
+var validateArrayBufferArguments = function(that, length){
+  anInstance(that, $ArrayBuffer, ARRAY_BUFFER);
+  var numberLength = +length
+    , byteLength   = toLength(numberLength);
+  if(numberLength != byteLength)throw RangeError(WRONG_LENGTH);
+  return byteLength;
+};
+
+if(!$typed.ABV){
+  $ArrayBuffer = function ArrayBuffer(length){
+    var byteLength = validateArrayBufferArguments(this, length);
+    this._b       = arrayFill.call(Array(byteLength), 0);
+    this[$LENGTH] = byteLength;
+  };
+
+  $DataView = function DataView(buffer, byteOffset, byteLength){
+    anInstance(this, $DataView, DATA_VIEW);
+    anInstance(buffer, $ArrayBuffer, DATA_VIEW);
+    var bufferLength = buffer[$LENGTH]
+      , offset       = toInteger(byteOffset);
+    if(offset < 0 || offset > bufferLength)throw RangeError('Wrong offset!');
+    byteLength = byteLength === undefined ? bufferLength - offset : toLength(byteLength);
+    if(offset + byteLength > bufferLength)throw RangeError(WRONG_LENGTH);
+    this[$BUFFER] = buffer;
+    this[$OFFSET] = offset;
+    this[$LENGTH] = byteLength;
+  };
+
+  if(DESCRIPTORS){
+    addGetter($ArrayBuffer, BYTE_LENGTH, '_l');
+    addGetter($DataView, BUFFER, '_b');
+    addGetter($DataView, BYTE_LENGTH, '_l');
+    addGetter($DataView, BYTE_OFFSET, '_o');
+  }
+
+  redefineAll($DataView[PROTOTYPE], {
+    getInt8: function getInt8(byteOffset){
+      return get(this, 1, byteOffset)[0] << 24 >> 24;
+    },
+    getUint8: function getUint8(byteOffset){
+      return get(this, 1, byteOffset)[0];
+    },
+    getInt16: function getInt16(byteOffset /*, littleEndian */){
+      var bytes = get(this, 2, byteOffset, arguments[1]);
+      return (bytes[1] << 8 | bytes[0]) << 16 >> 16;
+    },
+    getUint16: function getUint16(byteOffset /*, littleEndian */){
+      var bytes = get(this, 2, byteOffset, arguments[1]);
+      return bytes[1] << 8 | bytes[0];
+    },
+    getInt32: function getInt32(byteOffset /*, littleEndian */){
+      return unpackI32(get(this, 4, byteOffset, arguments[1]));
+    },
+    getUint32: function getUint32(byteOffset /*, littleEndian */){
+      return unpackI32(get(this, 4, byteOffset, arguments[1])) >>> 0;
+    },
+    getFloat32: function getFloat32(byteOffset /*, littleEndian */){
+      return unpackIEEE754(get(this, 4, byteOffset, arguments[1]), 23, 4);
+    },
+    getFloat64: function getFloat64(byteOffset /*, littleEndian */){
+      return unpackIEEE754(get(this, 8, byteOffset, arguments[1]), 52, 8);
+    },
+    setInt8: function setInt8(byteOffset, value){
+      set(this, 1, byteOffset, packI8, value);
+    },
+    setUint8: function setUint8(byteOffset, value){
+      set(this, 1, byteOffset, packI8, value);
+    },
+    setInt16: function setInt16(byteOffset, value /*, littleEndian */){
+      set(this, 2, byteOffset, packI16, value, arguments[2]);
+    },
+    setUint16: function setUint16(byteOffset, value /*, littleEndian */){
+      set(this, 2, byteOffset, packI16, value, arguments[2]);
+    },
+    setInt32: function setInt32(byteOffset, value /*, littleEndian */){
+      set(this, 4, byteOffset, packI32, value, arguments[2]);
+    },
+    setUint32: function setUint32(byteOffset, value /*, littleEndian */){
+      set(this, 4, byteOffset, packI32, value, arguments[2]);
+    },
+    setFloat32: function setFloat32(byteOffset, value /*, littleEndian */){
+      set(this, 4, byteOffset, packF32, value, arguments[2]);
+    },
+    setFloat64: function setFloat64(byteOffset, value /*, littleEndian */){
+      set(this, 8, byteOffset, packF64, value, arguments[2]);
+    }
+  });
+} else {
+  if(!fails(function(){
+    new $ArrayBuffer;     // eslint-disable-line no-new
+  }) || !fails(function(){
+    new $ArrayBuffer(.5); // eslint-disable-line no-new
+  })){
+    $ArrayBuffer = function ArrayBuffer(length){
+      return new BaseBuffer(validateArrayBufferArguments(this, length));
+    };
+    var ArrayBufferProto = $ArrayBuffer[PROTOTYPE] = BaseBuffer[PROTOTYPE];
+    for(var keys = gOPN(BaseBuffer), j = 0, key; keys.length > j; ){
+      if(!((key = keys[j++]) in $ArrayBuffer))hide($ArrayBuffer, key, BaseBuffer[key]);
+    };
+    if(!LIBRARY)ArrayBufferProto.constructor = $ArrayBuffer;
+  }
+  // iOS Safari 7.x bug
+  var view = new $DataView(new $ArrayBuffer(2))
+    , $setInt8 = $DataView[PROTOTYPE].setInt8;
+  view.setInt8(0, 2147483648);
+  view.setInt8(1, 2147483649);
+  if(view.getInt8(0) || !view.getInt8(1))redefineAll($DataView[PROTOTYPE], {
+    setInt8: function setInt8(byteOffset, value){
+      $setInt8.call(this, byteOffset, value << 24 >> 24);
+    },
+    setUint8: function setUint8(byteOffset, value){
+      $setInt8.call(this, byteOffset, value << 24 >> 24);
+    }
+  }, true);
+}
+setToStringTag($ArrayBuffer, ARRAY_BUFFER);
+setToStringTag($DataView, DATA_VIEW);
+hide($DataView[PROTOTYPE], $typed.VIEW, true);
+exports[ARRAY_BUFFER] = $ArrayBuffer;
+exports[DATA_VIEW] = $DataView;

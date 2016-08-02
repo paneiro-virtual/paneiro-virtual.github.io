@@ -1,1 +1,5 @@
-"use strict";require("../../modules/es6.regexp.to-string"),module.exports=function(e){return RegExp.prototype.toString.call(e)};
+'use strict';
+require('../../modules/es6.regexp.to-string');
+module.exports = function toString(it){
+  return RegExp.prototype.toString.call(it);
+};

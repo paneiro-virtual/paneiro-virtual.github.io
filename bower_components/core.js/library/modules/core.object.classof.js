@@ -1,1 +1,3 @@
-var $export=require("./_export");$export($export.S+$export.F,"Object",{classof:require("./_classof")});
+var $export = require('./_export');
+
+$export($export.S + $export.F, 'Object', {classof: require('./_classof')});

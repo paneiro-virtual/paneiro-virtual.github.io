@@ -18,7 +18,91 @@
 
 </head><body><dom-module id="register-page">
   <template>
-    <style type="text/css">:host{display:block;@apply (--paper-font-common-base);}header{padding:0 8px;}main{padding:48px 0;}.page-title{@apply (--paper-font-display1);margin-bottom:20px;font-weight:300;text-align:center;}.divider{height:1px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}.divider-border{height:100%;width:100px;max-width:100%;background:var(--primary-color);}paper-button{@apply (--paper-font-button);background:var(--primary-color);color:#fff;margin:0;}#registrationForm{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;}.input{margin:8px;}.input-name, .input-email{width:calc(66.666666% - 16px);}.input-cpf, .input-phone{width:calc(33.333333% - 16px);}.input-address, .paper-button-container{width:calc(100% - 16px);}.paper-button-container{margin:8px;text-align:center;}@media screen and (max-width: 768px){.input-name, .input-email, .input-cpf, .input-phone{width:calc(100% - 16px);}}</style>    
+    <style type="text/css">
+      :host {
+        display: block;
+        @apply(--paper-font-common-base);
+      }    
+
+      header {
+        padding: 0 8px;
+      }
+
+      main {
+        padding: 48px 0;
+      }
+
+      .page-title {
+        @apply(--paper-font-display1);
+        margin-bottom: 20px;
+        font-weight: 300;
+        text-align: center;
+      }     
+
+      .divider {
+        height: 1px;
+        width: 100%;                
+
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        justify-content: center;
+      } 
+
+      .divider-border {        
+        height: 100%;
+        width: 100px;
+        max-width: 100%;
+        background: var(--primary-color);        
+      }      
+
+      paper-button {
+        @apply(--paper-font-button);
+        background: var(--primary-color);
+        color: #fff;
+        margin: 0;
+      }    
+
+      #registrationForm {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+      }
+
+      .input {
+        margin: 8px;
+      }
+
+      .input-name, .input-email {
+        width: calc(66.666666% - 16px);
+      }
+
+      .input-cpf, .input-phone {
+        width: calc(33.333333% - 16px);
+      }
+
+      .input-address, .paper-button-container {
+        width: calc(100% - 16px);
+      }
+
+      .paper-button-container {
+        margin: 8px;
+        text-align: center;
+      }
+
+      @media screen and (max-width: 768px) {
+        .input-name, .input-email, .input-cpf, .input-phone {
+          width: calc(100% - 16px);
+        }
+      }
+    </style>    
 
     <page-header no-search-bar="" no-main-menu=""></page-header>
 
@@ -61,6 +145,5 @@
     <page-footer></page-footer>
   </template>
 
-  <script>!function(e,o,t,s,r){Polymer({is:"register-page",properties:{route:Object,email:String},onRegistrationFormPreSubmit:function(e){e.preventDefault();var o=this.$.toast,t=s.modals.message,r=this;o.open(),s.api.user.register(this.$.registrationForm.serialize()).then(function(e){o.close(),t.message="Sua solicitação de acesso foi registrada com sucesso. Em breve entraremos em contato.",t.title="Solicitação registrada com sucesso",t.open();var s=function(){t.removeEventListener("iron-overlay-closed",s),r.set("route.path","/")};t.addEventListener("iron-overlay-closed",s)}).catch(function(e){o.close(),t.title="Erro",t.message="CONFLICT"===e.status?"O email ou cpf fornecidos já estão cadastrados.":"Aconteceu um erro ao registrar a sua solicitação. Por favor tente novamente em alguns instantes.",t.open()})},onSendFormButtonTap:function(){this.$.registrationForm.validate()&&this.$.registrationForm.submit()}})}(window,document,void 0,paneiro,jambo);</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="register-page.js"></script></body></html>

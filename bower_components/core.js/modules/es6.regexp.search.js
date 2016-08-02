@@ -1,1 +1,10 @@
-require("./_fix-re-wks")("search",1,function(r,i,e){return[function(e){"use strict";var n=r(this),t=void 0==e?void 0:e[i];return void 0!==t?t.call(e,n):new RegExp(e)[i](String(n))},e]});
+// @@search logic
+require('./_fix-re-wks')('search', 1, function(defined, SEARCH, $search){
+  // 21.1.3.15 String.prototype.search(regexp)
+  return [function search(regexp){
+    'use strict';
+    var O  = defined(this)
+      , fn = regexp == undefined ? undefined : regexp[SEARCH];
+    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
+  }, $search];
+});

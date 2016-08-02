@@ -1,1 +1,9 @@
-module.exports=function(e){e.registerTask("build",["jshint:beforeConcat","concat","uglify"])};
+module.exports = function(grunt) {
+
+    grunt.registerTask('build', [
+        'jshint:beforeConcat', 
+        'concat',         
+        'uglify'
+    ]);
+
+};

@@ -1,1 +1,83 @@
-"use strict";var redefineAll=require("./_redefine-all"),getWeak=require("./_meta").getWeak,anObject=require("./_an-object"),isObject=require("./_is-object"),anInstance=require("./_an-instance"),forOf=require("./_for-of"),createArrayMethod=require("./_array-methods"),$has=require("./_has"),arrayFind=createArrayMethod(5),arrayFindIndex=createArrayMethod(6),id=0,uncaughtFrozenStore=function(e){return e._l||(e._l=new UncaughtFrozenStore)},UncaughtFrozenStore=function(){this.a=[]},findUncaughtFrozen=function(e,r){return arrayFind(e.a,function(e){return e[0]===r})};UncaughtFrozenStore.prototype={get:function(e){var r=findUncaughtFrozen(this,e);if(r)return r[1]},has:function(e){return!!findUncaughtFrozen(this,e)},set:function(e,r){var t=findUncaughtFrozen(this,e);t?t[1]=r:this.a.push([e,r])},delete:function(e){var r=arrayFindIndex(this.a,function(r){return r[0]===e});return~r&&this.a.splice(r,1),!!~r}},module.exports={getConstructor:function(e,r,t,n){var i=e(function(e,a){anInstance(e,i,r,"_i"),e._i=id++,e._l=void 0,void 0!=a&&forOf(a,t,e[n],e)});return redefineAll(i.prototype,{delete:function(e){if(!isObject(e))return!1;var r=getWeak(e);return r===!0?uncaughtFrozenStore(this).delete(e):r&&$has(r,this._i)&&delete r[this._i]},has:function(e){if(!isObject(e))return!1;var r=getWeak(e);return r===!0?uncaughtFrozenStore(this).has(e):r&&$has(r,this._i)}}),i},def:function(e,r,t){var n=getWeak(anObject(r),!0);return n===!0?uncaughtFrozenStore(e).set(r,t):n[e._i]=t,e},ufstore:uncaughtFrozenStore};
+'use strict';
+var redefineAll       = require('./_redefine-all')
+  , getWeak           = require('./_meta').getWeak
+  , anObject          = require('./_an-object')
+  , isObject          = require('./_is-object')
+  , anInstance        = require('./_an-instance')
+  , forOf             = require('./_for-of')
+  , createArrayMethod = require('./_array-methods')
+  , $has              = require('./_has')
+  , arrayFind         = createArrayMethod(5)
+  , arrayFindIndex    = createArrayMethod(6)
+  , id                = 0;
+
+// fallback for uncaught frozen keys
+var uncaughtFrozenStore = function(that){
+  return that._l || (that._l = new UncaughtFrozenStore);
+};
+var UncaughtFrozenStore = function(){
+  this.a = [];
+};
+var findUncaughtFrozen = function(store, key){
+  return arrayFind(store.a, function(it){
+    return it[0] === key;
+  });
+};
+UncaughtFrozenStore.prototype = {
+  get: function(key){
+    var entry = findUncaughtFrozen(this, key);
+    if(entry)return entry[1];
+  },
+  has: function(key){
+    return !!findUncaughtFrozen(this, key);
+  },
+  set: function(key, value){
+    var entry = findUncaughtFrozen(this, key);
+    if(entry)entry[1] = value;
+    else this.a.push([key, value]);
+  },
+  'delete': function(key){
+    var index = arrayFindIndex(this.a, function(it){
+      return it[0] === key;
+    });
+    if(~index)this.a.splice(index, 1);
+    return !!~index;
+  }
+};
+
+module.exports = {
+  getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
+    var C = wrapper(function(that, iterable){
+      anInstance(that, C, NAME, '_i');
+      that._i = id++;      // collection id
+      that._l = undefined; // leak store for uncaught frozen objects
+      if(iterable != undefined)forOf(iterable, IS_MAP, that[ADDER], that);
+    });
+    redefineAll(C.prototype, {
+      // 23.3.3.2 WeakMap.prototype.delete(key)
+      // 23.4.3.3 WeakSet.prototype.delete(value)
+      'delete': function(key){
+        if(!isObject(key))return false;
+        var data = getWeak(key);
+        if(data === true)return uncaughtFrozenStore(this)['delete'](key);
+        return data && $has(data, this._i) && delete data[this._i];
+      },
+      // 23.3.3.4 WeakMap.prototype.has(key)
+      // 23.4.3.4 WeakSet.prototype.has(value)
+      has: function has(key){
+        if(!isObject(key))return false;
+        var data = getWeak(key);
+        if(data === true)return uncaughtFrozenStore(this).has(key);
+        return data && $has(data, this._i);
+      }
+    });
+    return C;
+  },
+  def: function(that, key, value){
+    var data = getWeak(anObject(key), true);
+    if(data === true)uncaughtFrozenStore(that).set(key, value);
+    else data[that._i] = value;
+    return that;
+  },
+  ufstore: uncaughtFrozenStore
+};

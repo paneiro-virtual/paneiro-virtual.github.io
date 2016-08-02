@@ -1,1 +1,25 @@
-var ctx=require("./_ctx"),call=require("./_iter-call"),isArrayIter=require("./_is-array-iter"),anObject=require("./_an-object"),toLength=require("./_to-length"),getIterFn=require("./core.get-iterator-method"),BREAK={},RETURN={},exports=module.exports=function(e,r,t,o,i){var n,a,R,c,l=i?function(){return e}:getIterFn(e),u=ctx(t,o,r?2:1),E=0;if("function"!=typeof l)throw TypeError(e+" is not iterable!");if(isArrayIter(l)){for(n=toLength(e.length);n>E;E++)if(c=r?u(anObject(a=e[E])[0],a[1]):u(e[E]),c===BREAK||c===RETURN)return c}else for(R=l.call(e);!(a=R.next()).done;)if(c=call(R,u,a.value,r),c===BREAK||c===RETURN)return c};exports.BREAK=BREAK,exports.RETURN=RETURN;
+var ctx         = require('./_ctx')
+  , call        = require('./_iter-call')
+  , isArrayIter = require('./_is-array-iter')
+  , anObject    = require('./_an-object')
+  , toLength    = require('./_to-length')
+  , getIterFn   = require('./core.get-iterator-method')
+  , BREAK       = {}
+  , RETURN      = {};
+var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
+  var iterFn = ITERATOR ? function(){ return iterable; } : getIterFn(iterable)
+    , f      = ctx(fn, that, entries ? 2 : 1)
+    , index  = 0
+    , length, step, iterator, result;
+  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
+    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+    if(result === BREAK || result === RETURN)return result;
+  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+    result = call(iterator, f, step.value, entries);
+    if(result === BREAK || result === RETURN)return result;
+  }
+};
+exports.BREAK  = BREAK;
+exports.RETURN = RETURN;

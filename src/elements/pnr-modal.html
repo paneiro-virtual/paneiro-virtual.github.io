@@ -5,7 +5,11 @@
 
 </head><body><dom-module id="pnr-modal">
   <template>
-    <style>:host{display:block;}</style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
 
     <paper-dialog id="myDialog" with-backdrop="true" iron-overlay-closed="ironOverlayClosed">
       <h2 id="title">[[title]]</h2>
@@ -17,6 +21,5 @@
     </paper-dialog>
   </template>
 
-  <script>Polymer({is:"pnr-modal",properties:{title:String,message:String},open:function(){this.$.myDialog.open()},close:function(){this.$.myDialog.close()},ironOverlayClosed:function(o){this.fire("iron-overlay-closed",o)}});</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="pnr-modal.js"></script></body></html>

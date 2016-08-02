@@ -1,1 +1,21 @@
-jambo.deepExtend=function(e){e=e||{};for(var r=1;r<arguments.length;r++){var n=arguments[r];if(n)for(var o in n)n.hasOwnProperty(o)&&("object"==typeof n[o]?e[o]=jambo.deepExtend(e[o],n[o]):e[o]=n[o])}return e};
+jambo.deepExtend = function(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    var obj = arguments[i];
+
+    if (!obj)
+      continue;
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === 'object')
+          out[key] = jambo.deepExtend(out[key], obj[key]);
+        else
+          out[key] = obj[key];
+      }
+    }
+  }
+
+  return out;
+};

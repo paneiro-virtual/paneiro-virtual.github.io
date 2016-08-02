@@ -1,1 +1,7 @@
-"use strict";require("./_string-trim")("trimRight",function(t){return function(){return t(this,2)}},"trimEnd");
+'use strict';
+// https://github.com/sebmarkbage/ecmascript-string-left-right-trim
+require('./_string-trim')('trimRight', function($trim){
+  return function trimRight(){
+    return $trim(this, 2);
+  };
+}, 'trimEnd');

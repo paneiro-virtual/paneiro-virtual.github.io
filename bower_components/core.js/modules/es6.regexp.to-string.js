@@ -1,1 +1,25 @@
-"use strict";require("./es6.regexp.flags");var anObject=require("./_an-object"),$flags=require("./_flags"),DESCRIPTORS=require("./_descriptors"),TO_STRING="toString",$toString=/./[TO_STRING],define=function(e){require("./_redefine")(RegExp.prototype,TO_STRING,e,!0)};require("./_fails")(function(){return"/a/b"!=$toString.call({source:"a",flags:"b"})})?define(function(){var e=anObject(this);return"/".concat(e.source,"/","flags"in e?e.flags:!DESCRIPTORS&&e instanceof RegExp?$flags.call(e):void 0)}):$toString.name!=TO_STRING&&define(function(){return $toString.call(this)});
+'use strict';
+require('./es6.regexp.flags');
+var anObject    = require('./_an-object')
+  , $flags      = require('./_flags')
+  , DESCRIPTORS = require('./_descriptors')
+  , TO_STRING   = 'toString'
+  , $toString   = /./[TO_STRING];
+
+var define = function(fn){
+  require('./_redefine')(RegExp.prototype, TO_STRING, fn, true);
+};
+
+// 21.2.5.14 RegExp.prototype.toString()
+if(require('./_fails')(function(){ return $toString.call({source: 'a', flags: 'b'}) != '/a/b'; })){
+  define(function toString(){
+    var R = anObject(this);
+    return '/'.concat(R.source, '/',
+      'flags' in R ? R.flags : !DESCRIPTORS && R instanceof RegExp ? $flags.call(R) : undefined);
+  });
+// FF44- RegExp#toString has a wrong name
+} else if($toString.name != TO_STRING){
+  define(function toString(){
+    return $toString.call(this);
+  });
+}

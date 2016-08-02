@@ -1,1 +1,31 @@
-function set(e,t,r){var c,o,i=arguments.length<4?e:arguments[3],s=gOPD.f(anObject(e),t);if(!s){if(isObject(o=getPrototypeOf(e)))return set(o,t,r,i);s=createDesc(0)}return has(s,"value")?!(s.writable===!1||!isObject(i))&&(c=gOPD.f(i,t)||createDesc(0),c.value=r,dP.f(i,t,c),!0):void 0!==s.set&&(s.set.call(i,r),!0)}var dP=require("./_object-dp"),gOPD=require("./_object-gopd"),getPrototypeOf=require("./_object-gpo"),has=require("./_has"),$export=require("./_export"),createDesc=require("./_property-desc"),anObject=require("./_an-object"),isObject=require("./_is-object");$export($export.S,"Reflect",{set:set});
+// 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
+var dP             = require('./_object-dp')
+  , gOPD           = require('./_object-gopd')
+  , getPrototypeOf = require('./_object-gpo')
+  , has            = require('./_has')
+  , $export        = require('./_export')
+  , createDesc     = require('./_property-desc')
+  , anObject       = require('./_an-object')
+  , isObject       = require('./_is-object');
+
+function set(target, propertyKey, V/*, receiver*/){
+  var receiver = arguments.length < 4 ? target : arguments[3]
+    , ownDesc  = gOPD.f(anObject(target), propertyKey)
+    , existingDescriptor, proto;
+  if(!ownDesc){
+    if(isObject(proto = getPrototypeOf(target))){
+      return set(proto, propertyKey, V, receiver);
+    }
+    ownDesc = createDesc(0);
+  }
+  if(has(ownDesc, 'value')){
+    if(ownDesc.writable === false || !isObject(receiver))return false;
+    existingDescriptor = gOPD.f(receiver, propertyKey) || createDesc(0);
+    existingDescriptor.value = V;
+    dP.f(receiver, propertyKey, existingDescriptor);
+    return true;
+  }
+  return ownDesc.set === undefined ? false : (ownDesc.set.call(receiver, V), true);
+}
+
+$export($export.S, 'Reflect', {set: set});

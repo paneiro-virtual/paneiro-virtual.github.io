@@ -1,1 +1,7 @@
-"use strict";require("./_string-html")("strike",function(t){return function(){return t(this,"strike","","")}});
+'use strict';
+// B.2.3.12 String.prototype.strike()
+require('./_string-html')('strike', function(createHTML){
+  return function strike(){
+    return createHTML(this, 'strike', '', '');
+  }
+});

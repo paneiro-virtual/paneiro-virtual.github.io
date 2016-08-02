@@ -4,12 +4,15 @@
 
 </head><body><dom-module id="cpf-input">
   <template>
-    <style>:host{display:block;}</style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
         
     <cpf-validator validator-name="cpf-validator"></cpf-validator>
     <paper-input auto-validate="{{autoValidate}}" error-message="{{errorMessage}}" label="{{label}}" name="{{name}}" required="{{required}}" disabled="{{disabled}}" value="{{value}}" maxlength="14" minlength="14" on-input="change" validator="cpf-validator"></paper-input>    
   </template>
 
-  <script>Polymer({is:"cpf-validator",behaviors:[Polymer.IronValidatorBehavior],validate:function(r){for(var a="",t=r.charAt(0),e=!0,n=0,i=r.length;n<i;++n)isNaN(r.charAt(n))||(a+=r.charAt(n),e&&(e=e&&t===r.charAt(n)));if(r=a,e)return!1;var o,s;if(o=0,"00000000000"==r)return!1;for(n=1;n<=9;n++)o+=parseInt(r.substring(n-1,n))*(11-n);if(s=10*o%11,10!=s&&11!=s||(s=0),s!=parseInt(r.substring(9,10)))return!1;for(o=0,n=1;n<=10;n++)o+=parseInt(r.substring(n-1,n))*(12-n);return s=10*o%11,10!=s&&11!=s||(s=0),s==parseInt(r.substring(10,11))}}),Polymer({is:"cpf-input",properties:{autoValidate:Boolean,errorMessage:String,label:String,name:String,value:String,required:Boolean,disabled:Boolean},change:function(r){for(var a=r.target.value,t="",e=0,n=a.length;e<n&&e<14;++e)3===e||7===e?t+=".":11===e&&(t+="-"),isNaN(a.charAt(e))||(t+=a.charAt(e));r.target.value=t,r.target.validate()}});</script>
-</dom-module>
-</body></html>
+  </dom-module>
+<script src="cpf-input.js"></script></body></html>
