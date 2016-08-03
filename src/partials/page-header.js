@@ -1,6 +1,0 @@
-'use strict';
-
-Polymer({
-      is: 'page-header'
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhcnRpYWxzL3BhZ2UtaGVhZGVyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsUUFBUTtBQUNGLFVBQUk7QUFERixDQUFSIiwiZmlsZSI6InBhcnRpYWxzL3BhZ2UtaGVhZGVyLmpzIiwic291cmNlc0NvbnRlbnQiOlsiUG9seW1lcih7XG4gICAgICBpczogJ3BhZ2UtaGVhZGVyJyAgICAgICAgICAgICAgICAgIFxuICAgIH0pOyJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==

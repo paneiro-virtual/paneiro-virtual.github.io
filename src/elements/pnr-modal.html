@@ -1,25 +1,3 @@
-<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
-
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
-
-</head><body><dom-module id="pnr-modal">
-  <template>
-    <style>
-      :host {
+<link rel="import" href="../../bower_components/polymer/polymer.html"><link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html"><link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html"><dom-module id="pnr-modal"><template><style>:host {
         display: block;
-      }
-    </style>
-
-    <paper-dialog id="myDialog" with-backdrop="true" iron-overlay-closed="ironOverlayClosed">
-      <h2 id="title">[[title]]</h2>
-      
-      <p id="message">[[message]]</p>
-      <div class="buttons">
-        <paper-button dialog-confirm="">Ok</paper-button>
-      </div>
-    </paper-dialog>
-  </template>
-
-  </dom-module>
-<script src="pnr-modal.js"></script></body></html>
+      }</style><paper-dialog id="myDialog" with-backdrop="true" iron-overlay-closed="ironOverlayClosed"><h2 id="title">[[title]]</h2><p id="message">[[message]]</p><div class="buttons"><paper-button dialog-confirm>Ok</paper-button></div></paper-dialog></template><script type="text/javascript">"use strict";!function(o,i,e,n,t){Polymer({is:"pnr-modal",properties:{title:String,message:String},open:function(){this.$.myDialog.open()},close:function(){this.$.myDialog.close()},ironOverlayClosed:function(o){this.fire("iron-overlay-closed",o)}})}(window,document,void 0,paneiro,jambo);</script></dom-module>
